@@ -1,0 +1,737 @@
+@font-face {
+  font-family: "MATROSKA";
+  src: url("fonts/MATROSKA.ttf.woff") format("woff"),
+    url("fonts/MATROSKA.ttf.svg#MATROSKA") format("svg"), url("fonts/MATROSKA.ttf.eot"),
+    url("fonts/MATROSKA.ttf.eot?#iefix") format("embedded-opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "UltimateTeam-Icons";
+  src: url("fonts/UltimateTeam-Icons.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "UltimateTeamCondensed";
+  src: url("fonts/UltimateTeamCondensed.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Variables
+$dark-black: #1E242A;
+$light-gray: #292f35;
+$lighter-gray: #505a64;
+$gray-blue: #2d2f34;
+$white: #fff;
+$beige: #F8EEDE;
+$orange: #ff6a00;
+$base-font-size: 14px;
+$base-font-family: 'UltimateTeamCondensed', sans-serif;
+$title-font-family: 'MATROSKA';
+
+$primary-color: $orange;
+@import 'loaders.css/src/animations/line-scale.scss';
+
+
+input:disabled{
+  opacity: 0.5;
+  background-color: rgba(0,0,0,0.15)!important;
+}
+
+body {
+  background-color: $dark-black;
+  background-image: url('assets/worldcup.png');
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  color: $white;
+  font-family: $title-font-family;
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__twitter {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: $dark-black;
+
+    & a {
+      color: $dark-black;
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-right: 1rem;
+
+      &:nth-last-child(1){
+        margin-right: 0;
+      }
+
+      &:hover {
+        border-bottom: 2px solid $orange;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__img {
+    max-width: 20rem;
+    height: auto;
+    margin: auto 0;
+  }
+}
+
+.filter {
+  display: flex;
+  // justify-content: center;
+  // flex-direction: column;
+  border-radius: .5rem;
+  margin: 1rem auto;
+  border: 1px dashed $beige;
+  text-align: center;
+  width: 85%;
+
+  @media only screen and (max-width: 768px) {
+      justify-content: center;
+      flex-direction: column;
+      width: 99%;
+  }
+
+  &__checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin: 2rem 0;
+
+    @media only screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  &__item {
+    margin-bottom: 1rem;
+    position: relative;
+
+    & input[type=number]{
+      min-width: 5rem;
+    }
+
+    &.checkbox{
+      display: flex;
+      justify-content: center;
+      margin-bottom: .1rem;
+
+      @media only screen and (max-width: 768px) {
+        width: 100%;
+      }
+
+      & .MuiFormControlLabel-root{
+        margin-left: 1rem;
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+    }
+  }
+
+  & .MuiPaper-root {
+    background-color: #2d2823;
+    color: $beige;
+    border-radius: .5rem!important;
+  }
+
+  & button {
+    color: $white;
+    font-family: 'UltimateTeamCondensed';
+    font-size: 1rem;
+  }
+
+  & .MuiTypography-body1{
+    margin: 0 auto;
+    font-family: 'UltimateTeamCondensed';
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  & .MuiPaper-root {
+    width: 100%;
+  }
+
+  & .MuiFormGroup-root {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    @media only screen and (max-width: 768px) {
+      flex-direction: column;    
+      align-items: center;
+    }
+  }
+
+  & input, & select{
+    font-family: $base-font-family;
+    font-size: 1.2rem;
+    background-color: $light-gray;
+    padding: 0 1rem;
+    min-width: 25rem;
+    font-weight: normal;
+    border: 1px solid $lighter-gray;
+    border-radius: .5rem;
+    color: $white;
+    -ms-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box; 
+    box-sizing:border-box;
+    height: 50px;
+
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        min-width: 0;
+    }
+  }
+
+  & fieldset {
+    border-color: $beige;
+  }
+}
+
+.statistics {
+  border-top: 1px solid $lighter-gray;
+  border-bottom: 1px solid $lighter-gray;
+  padding: 1rem 0;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    margin: 1rem;
+
+    &__header {
+      color: $beige;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    &__value {
+      color: $white;
+      text-align: center;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    &__coins {
+      &::after {
+        background-position: right top;
+        content: "";
+        background-repeat: no-repeat;
+        background-size: 100%;
+        display: inline-block;
+        height: 1rem;
+        vertical-align: middle;
+        width: 1rem;
+        background-image: url('assets/coinIcon.png');
+        margin-top: -.15rem;
+        margin-left: .1rem;
+      }
+    }
+
+    &__points {
+      &::after {
+        background-position: right top;
+        content: "";
+        background-repeat: no-repeat;
+        background-size: 100%;
+        display: inline-block;
+        height: 1rem;
+        vertical-align: middle;
+        width: 1rem;
+        background-image: url('assets/pointsIcon.png');
+        margin-top: -.15rem;
+      }
+    }
+  }
+}
+
+.packs {
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+        background-color: transparent!important;
+        color: $white!important;
+        padding: 0;
+        margin: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 12.5rem;
+        align-items: center;
+
+        &__title {
+          vertical-align: bottom;
+          height: 4.5rem;
+          text-overflow: ellipsis;
+          display: -webkit-flex;
+          align-items: center;
+          
+          & h2 {
+            color: $beige;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            text-align: center;
+            vertical-align: center;
+            margin: 1rem 0 0.5rem 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+                    line-clamp: 2; 
+            -webkit-box-orient: vertical;
+          }
+        }
+        
+        &__pricing {
+          margin: 1rem 0;
+          font-size: 1.3rem;
+
+          &__coins {
+            &::after {
+              background-position: right top;
+              content: "";
+              background-repeat: no-repeat;
+              background-size: 100%;
+              display: inline-block;
+              height: 1rem;
+              vertical-align: middle;
+              width: 1rem;
+              background-image: url('assets/coinIcon.png');
+              margin-top: -.15rem;
+              margin-left: .1rem;
+            }
+          }
+
+          &__points {
+            &::after {
+              background-position: right top;
+              content: "";
+              background-repeat: no-repeat;
+              background-size: 100%;
+              display: inline-block;
+              height: 1rem;
+              vertical-align: middle;
+              width: 1rem;
+              background-image: url('assets/pointsIcon.png');
+              margin-top: -.15rem;
+            }
+          }
+        }
+
+        &__preview {
+          max-width: 10rem;
+          position: relative;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+          
+          &:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            scale: 1.05;
+            transition: box-shadow 0.1s ease-in-out;
+            transition: scale 0.1s ease-in-out;
+          }
+
+          &__data {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+            border-bottom: 3px solid $orange;
+            background-color: $gray-blue;
+          }
+
+          & img {
+            width: 100%;
+          }
+
+          &__description {
+            display: block;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            opacity: 0;
+            background-color: #00000088;
+
+            & span {
+              display: block;
+              padding: 1rem;
+            }
+          }
+
+          &__description:hover {
+            opacity: 1;
+          }
+        }
+
+        &__counter {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+
+          &__element {
+            flex: 0 50%;
+            text-align: center;
+            text-transform: uppercase;
+
+            &__stepper {
+              line-height: 1.4rem;
+              vertical-align: middle;
+              margin-top: .3rem;
+
+              &__amount {
+                font-size: 1rem;
+                margin: 0 0.4rem;
+              }
+
+              &__decrease {
+                display: inline-block;
+                color: $white;
+                background-color: red;
+                border: 0;
+                width: 1.3rem;
+                height: 1.3rem;
+                line-height: 1.3rem;
+                text-align: center;
+
+                &:hover {
+                  cursor: pointer;
+                }
+              }
+
+              &__increase {
+                display: inline-block;
+                color: $white;
+                background-color: #0abf50;
+                border: 0;
+                width: 1.3rem;
+                height: 1.3rem;
+                line-height: 1.3rem;
+                text-align: center;
+
+                &:hover {
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+        }
+    }
+}
+
+// h1{
+//   font-family: 'UltimateTeamCondensed';
+//   color:#eb6200;
+//   margin-top: 10px;
+//   margin-bottom: 20px;
+//   font-style: italic;
+//   font-size: 70px;
+// }
+
+// .card.fifa22{
+//   height: 520px;
+//   margin-top: 25px;
+// }
+
+// .card.fifa22.small{
+//   transform: scale(.4);
+//   height: 150px;
+// }
+
+// #bottom, #top{
+//   z-index: -1;
+// }
+
+// .nation{
+//   cursor: pointer;
+// }
+
+// #bottom{
+//   background: url("assets/bottom.png");
+//   background-size: cover;
+//   width: 100vw;
+//   height: 16vw;
+//   bottom: 0px;
+//   aspect-ratio: 6380/1149;
+//   position: fixed;
+// }
+
+// #top{
+//   background: url("assets/top.png");
+//   width: 100vw;
+//   background-size:cover;
+//   position: fixed;
+//   aspect-ratio: 6380/1022;
+// }
+
+// .ut-item-player-status--loan{
+//   font-size: 36px;
+//   width: 50px;
+//   line-height: 50px;
+//   z-index: 1;
+//   height: 50px;
+//   right: 121px;
+//   top: 416px;
+//   /* display: block; */
+//   position: absolute;
+//   z-index: 3;
+//   text-align: center;
+//   font-family: UltimateTeamCondensed;
+//   font-weight: 600;
+//   box-shadow: 0 1px 1px 0 rgb(0 0 0 / 25%);
+//   background: linear-gradient(to bottom,#44a7db 0,#42a2d4 100%);
+//   color: #fff;
+//   border-radius: 25px;
+// }
+
+// #root{
+//   position: absolute;
+//   overflow-y: scroll;
+//   top: 0px;
+//   bottom: 120px;
+//   -ms-overflow-style: none;  /* IE and Edge */
+//   scrollbar-width: none;  /* Firefox */
+// }
+// #root::-webkit-scrollbar {
+//   display: none;
+// }
+
+
+// body{
+//   margin-bottom: 20px;
+//   padding-top:20px;
+// }
+
+// .untradeable:before{
+//   font-family: UltimateTeam-Icons,sans-serif;
+//   color: white;
+//   right: calc(50% + 16px);
+//   top: 16px;
+//   position: absolute;
+//   width: 1.1em;
+//   content: "\E07F";
+//   z-index: 2;
+//   font-size: 50px;
+// }
+
+// .MuiGrid-item{
+//   display:flex;
+//   justify-content: center;
+// }
+
+// .pack h1{
+//   font-size: 40px;
+//   color: #f8eede;
+//   font-style: italic;
+//   font-weight: 600;
+//   text-transform: uppercase;
+//   margin-top: unset;
+//   height: 144px;
+// }
+
+// .pack.pack{
+//   color: #f8eede;
+//   border: 1px solid #556c95;
+//   padding: 20px;
+//   width: 410px;
+//   margin: 20px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   font-size: 30px;
+//   font-family: 'UltimateTeamCondensed';
+// }
+
+// .pack img{
+//   margin-top:20px;
+//   margin-bottom: 20px;
+// }
+
+// .pack.MuiCard-root{
+//   background-color: #1e242a;
+// }
+
+// #root{
+//   width: 100vw;
+//   padding-top: 20px;
+// }
+
+// .count-container{
+//   display: flex;
+//     flex-direction: row;
+//     width: 100%;
+// }
+
+// .count-element{
+//   flex-grow: 1;
+//   text-align: center;
+// }
+
+// .modify-count{
+//   cursor: pointer;
+// }
+
+// .statsline.statsline{
+//   font-size: 35px;
+//     text-transform: uppercase;
+//     font-weight: bold;
+//     color: rgb(23 111 153);
+//     margin-bottom: 30px;
+// }
+
+.packs-table{
+  color: #F8EEDE;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.packs-table{
+  border-collapse: separate;
+  border-spacing: 0;
+  td, th{
+    min-width: 100px;
+    text-align: center;
+    padding: 10px;
+  }
+  tr:nth-child(odd){
+    background-color: $light-gray;
+  }
+  tr:nth-child(even){
+    background-color: $lighter-gray;
+  }
+  tr:nth-child(0), tr:last-child{
+    background-color: $dark-black;
+  }
+}
+
+.spreadsheet{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.MuiCheckbox-colorPrimary svg {
+  color: $white!important;
+}
+
+.MuiFormControlLabel-label{
+  font-size: 1.2rem!important;
+  font-family: $base-font-family!important;
+  text-transform: uppercase;
+  font-weight: 100;
+  color: $beige;
+}
+
+.smallPacks{
+  width: 20px;
+  margin-right: 10px;
+}
+
+.packName{
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nameCell{
+  display: flex;
+}
+
+.displayName{
+  color: $beige;
+  text-transform: uppercase;
+}
+
+.cloudArea{
+  position: absolute;
+}
+
+
+.graphic{
+  width: 60vw;
+  height: auto;
+  margin: 1vw;
+}
+
+.graphic-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.loader-hidden {
+  display: none;
+}
+.loader-active {
+  display: block;
+}
+
+.loader{
+  transform: scale(3);
+  transform-origin: center;
+  bottom: 50%;
+  position: absolute;
+}
+
+label:not(.MuiFormControlLabel-root){
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  z-index: 1;
+  background: $gray-blue;
+  padding: 0px 5px;
+}
+
+label:not(.MuiFormControlLabel-root)::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 100%;
+  height: 100%;
+  border:1px solid $lighter-gray;
+}
+
+#rarity{
+  height: 12rem;
+}
