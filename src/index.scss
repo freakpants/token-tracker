@@ -735,3 +735,38 @@ label:not(.MuiFormControlLabel-root)::before{
 #rarity{
   height: 12rem;
 }
+
+.token .background{
+  width: 175px;
+}
+
+.token{
+  position: relative;
+}
+
+#tokens{
+  display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    justify-content: center;
+}
+
+.name{
+  line-height: 28px;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  bottom: 11%;
+  position: absolute;
+  text-align: center;
+}
+
+.avatar{
+  position: absolute;
+  position: absolute;
+  right: 6%;
+  top: 18%;
+  width: 110px;
+}

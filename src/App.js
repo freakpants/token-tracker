@@ -14,11 +14,13 @@ import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
+import WcToken from "./assets/wctoken.png";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tokens: [],	
     };
 
     // Your web app's Firebase configuration
@@ -78,6 +80,12 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+        // get the players from the json file
+        let tokens = require("./Tokens.json");
+        this.setState({ tokens: tokens });
+  }
+
   render() {
     const theme = createTheme({
       typography: {
@@ -101,15 +109,34 @@ class App extends Component {
       },
     });
 
+    console.log(this.state.tokens);
+
     return (
       <ThemeProvider theme={theme}>
-                <div className={"logo"}>
+        <div className={"logo"}>
           <img className={"logo__img"} src={Logo} alt="FUT23 Pack Collector" />
           <div className={"logo__twitter"}>
             <a href="https://twitter.com/FUTCoder" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> FUT Coder</a> x{" "}
             <a href="https://twitter.com/Kimpembro" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> Kimpembro</a> x{" "}
             <a href="https://twitter.com/Fleck_GFX" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> Fleck</a></div>
         </div>
+        <div id="tokens">
+        {this.state.tokens.length > 0 && (
+          this.state.tokens.map((token) => {
+            return (
+              
+              <div key={token.definitionId} className={"token"}>
+                <img className="background" src={WcToken} alt="WC Token" />
+                {token.bestQualityImage === "futbin" && (
+                  <img className="avatar" src={"https://cdn.futbin.com/content/fifa23/img/players/" + token.playerId + ".png"} />
+                )}
+                <div className="name">{token.knownAs ? token.knownAs : token.lastName}</div>
+              </div>
+              
+            );
+          })
+         )}
+         </div>
       </ThemeProvider>
     );
   }
