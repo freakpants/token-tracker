@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.f06e97b7.css",
+    "main.css": "/token-tracker/static/css/main.77f1bcb2.css",
     "main.js": "/token-tracker/static/js/main.1405896c.js",
     "static/media/worldcup.png": "/token-tracker/static/media/worldcup.b8f3597c26105eb81b6a.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
@@ -12,11 +12,11 @@
     "static/media/UltimateTeam-Icons.woff": "/token-tracker/static/media/UltimateTeam-Icons.4ce90d80cd304b60c8f0.woff",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.f06e97b7.css.map": "/token-tracker/static/css/main.f06e97b7.css.map",
+    "main.77f1bcb2.css.map": "/token-tracker/static/css/main.77f1bcb2.css.map",
     "main.1405896c.js.map": "/token-tracker/static/js/main.1405896c.js.map"
   },
   "entrypoints": [
-    "static/css/main.f06e97b7.css",
+    "static/css/main.77f1bcb2.css",
     "static/js/main.1405896c.js"
   ]
 }
