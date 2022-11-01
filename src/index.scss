@@ -737,7 +737,8 @@ label:not(.MuiFormControlLabel-root)::before{
 }
 
 .token .background{
-  width: 175px;
+  width: 140px;
+  filter: drop-shadow(4px 6px 4px rgba(10, 184, 172, 0.8));
 }
 
 .token{
@@ -755,18 +756,18 @@ label:not(.MuiFormControlLabel-root)::before{
   line-height: 28px;
   text-transform: uppercase;
   width: 100%;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: white;
-  bottom: 11%;
+  bottom: 8%;
   position: absolute;
   text-align: center;
+  font-weight: 600;
 }
 
 .avatar{
   position: absolute;
-  position: absolute;
-  right: 6%;
-  top: 18%;
-  width: 110px;
+  right: 4%;
+  top: 17%;
+  width: 90px;
 }
