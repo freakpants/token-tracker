@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.def63d6e.css",
-    "main.js": "/token-tracker/static/js/main.87ab65f1.js",
+    "main.css": "/token-tracker/static/css/main.f06e97b7.css",
+    "main.js": "/token-tracker/static/js/main.1405896c.js",
     "static/media/worldcup.png": "/token-tracker/static/media/worldcup.b8f3597c26105eb81b6a.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
@@ -12,11 +12,11 @@
     "static/media/UltimateTeam-Icons.woff": "/token-tracker/static/media/UltimateTeam-Icons.4ce90d80cd304b60c8f0.woff",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.def63d6e.css.map": "/token-tracker/static/css/main.def63d6e.css.map",
-    "main.87ab65f1.js.map": "/token-tracker/static/js/main.87ab65f1.js.map"
+    "main.f06e97b7.css.map": "/token-tracker/static/css/main.f06e97b7.css.map",
+    "main.1405896c.js.map": "/token-tracker/static/js/main.1405896c.js.map"
   },
   "entrypoints": [
-    "static/css/main.def63d6e.css",
-    "static/js/main.87ab65f1.js"
+    "static/css/main.f06e97b7.css",
+    "static/js/main.1405896c.js"
   ]
 }
