@@ -1,11 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { GoogleAuthProvider, getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import { getFunctions } from "firebase/functions";
+import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+import { getDatabase, set, ref } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-
+import { Button } from "@mui/material";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -25,10 +24,15 @@ class App extends Component {
       expiredCount: 0,
       missed: 0,
       max: 0,
+      user: null,
+      profile: "default",
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
+    this.triggerGoogleLogin = this.triggerGoogleLogin.bind(this);
+    this.saveTokens = this.saveTokens.bind(this);
+
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -57,8 +61,6 @@ class App extends Component {
 
     this.fireApp = fireApp;
 
-    const functions = getFunctions(fireApp);
-    this.functions = functions;
 
     const analytics = getAnalytics(fireApp);
     this.analytics = analytics;
@@ -77,7 +79,7 @@ class App extends Component {
         // write user object to local storage
         localStorage.setItem("user", JSON.stringify(user));
 
-        // this.setState({ user: user });
+        this.setState({ user: user });
       } else {
         // User is signed out
         localStorage.setItem("user", JSON.stringify(user));
@@ -85,6 +87,32 @@ class App extends Component {
         this.setState({ user: false });
       }
     });
+  }
+
+  triggerGoogleLogin() {
+    signInWithRedirect(this.auth, this.GoogleAuthProvider);
+  }
+
+  saveTokens() {
+
+    if(this.state.user) {
+      const { tokens, profile } = this.state;
+      const { uid } = this.state.user;
+
+      // only keep claimed status of tokens
+      const tokensToSave = [];
+
+      tokens.map((token) => {
+        tokensToSave[token.definitionId]= {
+          claimed: token.claimed,
+        };
+      });
+  
+      // save to firebase realtime database
+      set(ref(this.database, `tokens/worldcup/${uid}/${profile}`), tokensToSave );
+    }
+
+
   }
 
   componentDidMount() {
@@ -140,7 +168,7 @@ class App extends Component {
 
     const max = total - missed;
 
-    this.setState({ total: total, claimed: claimed, missed: missed, max: max });
+    this.setState({ total: total, claimed: claimed, missed: missed, max: max }, this.saveTokens);
   }
 
   render() {
@@ -226,7 +254,23 @@ class App extends Component {
             </div>
           </div>
           <div className={"controls"}>
-            Buttons etc 
+          {!this.state.user && (
+          <img
+            alt="Google Login"
+            onClick={this.triggerGoogleLogin}
+            src={
+              "https://developers.google.com/static/identity/images/btn_google_signin_dark_normal_web.png"
+            }
+          />
+        )}
+          {this.state.user && (
+          <div className={"cloudArea"}>
+            <div className={"displayName"}>
+              Logged in as {this.state.user.displayName}
+            </div>
+            <div></div>
+          </div>
+        )}
           </div>
         </div>
 
