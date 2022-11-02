@@ -1,11 +1,13 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.d2bf1f76.css",
-    "main.js": "/token-tracker/static/js/main.bd4ae5ae.js",
-    "static/media/worldcup.png": "/token-tracker/static/media/worldcup.b8f3597c26105eb81b6a.png",
+    "main.css": "/token-tracker/static/css/main.4602bec5.css",
+    "main.js": "/token-tracker/static/js/main.c1cb0604.js",
+    "static/media/worldcup_dark.png": "/token-tracker/static/media/worldcup_dark.4c82ff050602fbb9a228.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
     "static/media/wctoken.png": "/token-tracker/static/media/wctoken.92bb7bf2025936f32f70.png",
+    "static/media/wctokennew.png": "/token-tracker/static/media/wctokennew.88e1a0161dc89bedbb48.png",
+    "static/media/Qatar2022Arabic-Bold.woff": "/token-tracker/static/media/Qatar2022Arabic-Bold.1f403b642d5a8e342bc1.woff",
     "static/media/MATROSKA.ttf.woff": "/token-tracker/static/media/MATROSKA.ttf.c4d124f2a20b28b05975.woff",
     "static/media/UltimateTeamCondensed.woff": "/token-tracker/static/media/UltimateTeamCondensed.faca749167dc9d71ff77.woff",
     "static/media/pack.png": "/token-tracker/static/media/pack.86f905920f1508e35652.png",
@@ -14,11 +16,11 @@
     "static/media/xp.png": "/token-tracker/static/media/xp.7f815605e92871829864.png",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.d2bf1f76.css.map": "/token-tracker/static/css/main.d2bf1f76.css.map",
-    "main.bd4ae5ae.js.map": "/token-tracker/static/js/main.bd4ae5ae.js.map"
+    "main.4602bec5.css.map": "/token-tracker/static/css/main.4602bec5.css.map",
+    "main.c1cb0604.js.map": "/token-tracker/static/js/main.c1cb0604.js.map"
   },
   "entrypoints": [
-    "static/css/main.d2bf1f76.css",
-    "static/js/main.bd4ae5ae.js"
+    "static/css/main.4602bec5.css",
+    "static/js/main.c1cb0604.js"
   ]
 }
