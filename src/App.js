@@ -93,17 +93,22 @@ class App extends Component {
       expiry.setUTCHours(17, 0, 0, 0);
       let today = new Date();
       let diff = expiry.getTime() - today.getTime();
-      let days = Math.ceil(diff / (1000 * 3600 * 24));
-      if (days < 4) {
-        // calculate and add expiry difference in hours and minutes
-        let hours = Math.floor(diff / (1000 * 3600));
-        let minutes = Math.floor((diff % (1000 * 3600)) / (1000 * 60));
-        token.expiry = `${hours}h ${minutes}m`;
+      if(diff < 0){
+        token.expired = true;
       } else {
-        token.expiry = days + " days";
+        let days = Math.ceil(diff / (1000 * 3600 * 24));
+        if (days < 4) {
+          // calculate and add expiry difference in hours and minutes
+          let hours = Math.floor(diff / (1000 * 3600));
+          let minutes = Math.floor((diff % (1000 * 3600)) / (1000 * 60));
+          token.expiry = `${hours}h ${minutes}m`;
+        } else {
+          token.expiry = days + " days";
+        }
       }
       // randomly assign claimed
       token.claimed = Math.random() < 0.5;
+
     });
     this.setState({ tokens: tokens }, this.calculateTotal);
   }
@@ -186,8 +191,15 @@ class App extends Component {
         <div id="tokens">
           {this.state.tokens.length > 0 &&
             this.state.tokens.map((token) => {
+              let tokenClassName = "token";
+              if (token.claimed) {
+                tokenClassName += " claimed";
+              }
+              if (token.expired) {
+                tokenClassName += " expired";
+              }
               return (
-                <div onClick={() => this.handleTokenClick(token.definitionId)} key={token.definitionId} className={token.claimed ? "token claimed" : "token"}>
+                <div onClick={() => this.handleTokenClick(token.definitionId)} key={token.definitionId} className={tokenClassName}>
                   <img className="background" src={WcToken} alt="WC Token" />
                   {token.bestQualityImage === "futbin" && (
                     <img
@@ -223,7 +235,7 @@ class App extends Component {
                       : token.lastName}
                   </div>
                   <div className="expiry">
-                    {token.expiry} LEFT<br/>
+                    {token.expired ? "Expired" : token.expiry + " LEFT"}<br/>
                     {token.swap_source}
                     {token.swap_source_type === "sbc" && (
                       <img src={SBC} className="sbc-icon" alt="SBC" />

@@ -870,3 +870,7 @@ label:not(.MuiFormControlLabel-root)::before{
   padding: 1rem;
   font-size: 1rem;
 }
+
+.token.expired{
+  filter: grayscale(75) opacity(50%);
+}
