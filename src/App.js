@@ -169,7 +169,7 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
-          <div id="counters">
+          <div id="counter__wrapper">          <div id="counters">
             <div className={"counter__item"}>
               <div className={"counter__title"}>Total</div>
               <div className={"counter__value"}>{this.state.total}</div>
@@ -190,7 +190,9 @@ class App extends Component {
               <div className={"counter__title"}>Max</div>
               <div className={"counter__value"}>{this.state.max}</div>
             </div>
-          </div>
+          </div></div>
+
+
           <div className={"logo"}>
             <img
               className={"logo__img"}

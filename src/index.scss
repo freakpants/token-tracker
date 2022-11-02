@@ -905,3 +905,9 @@ label:not(.MuiFormControlLabel-root)::before{
 .controls{
   width: 340px;
 }
+
+#counter__wrapper{
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
