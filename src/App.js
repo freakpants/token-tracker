@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
 import WcToken from "./assets/wctoken.png";
+import WcTokenNew from "./assets/wctokennew.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
@@ -222,11 +223,17 @@ class App extends Component {
 
 
           <div className={"logo"}>
-            <img
+            {/* <img
               className={"logo__img"}
               src={Logo}
               alt="FUT23 Pack Collector"
-            />
+            /> */}
+            <div className={"logo__title"}>
+              World Cup 2022
+            </div>            
+            <div className={"logo__subtitle"}>
+              Token Tracker
+            </div>
             <div className={"logo__twitter"}>
               <a
                 href="https://twitter.com/FUTCoder"
@@ -290,7 +297,7 @@ class App extends Component {
                   key={token.definitionId}
                   className={tokenClassName}
                 >
-                  <img className="background" src={WcToken} alt="WC Token" />
+                  <img className="background" src={WcTokenNew} alt="WC Token" />
                   {token.bestQualityImage === "futbin" && (
                     <img
                       className="avatar"
