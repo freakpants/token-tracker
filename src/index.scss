@@ -61,7 +61,6 @@ h1 {
 }
 
 .logo {
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -867,15 +866,18 @@ label:not(.MuiFormControlLabel-root)::before{
 
 #counters{
   background-color: rgba(0,0,0,0.5);
-  position: absolute;
-  top: 3%;
-  left: 3%;
   padding: 1rem;
   font-size: 1.3rem;
   display: flex;
-  gap: 20px;
   text-transform: uppercase;
   border-radius: 50px;
+  justify-content: space-around;
+  max-height: 3rem;
+  gap: 20px;
+  @media only screen and (max-width: 768px) {
+    font-size: 1rem;
+    gap: unset;
+  }
 }
 
 .counter__title{
@@ -889,4 +891,17 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .token.expired{
   filter: grayscale(75) opacity(50%);
+}
+
+.headerArea{
+  display: flex;
+  justify-content: space-between;
+  row-gap: 20px;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.controls{
+  width: 340px;
 }

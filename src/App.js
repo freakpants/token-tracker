@@ -97,7 +97,7 @@ class App extends Component {
       expiry.setUTCHours(17, 0, 0, 0);
       let today = new Date();
       let diff = expiry.getTime() - today.getTime();
-      if(diff < 0){
+      if (diff < 0) {
         token.expired = true;
         expiredCount++;
       } else {
@@ -113,12 +113,14 @@ class App extends Component {
       }
       // randomly assign claimed
       token.claimed = Math.random() < 0.5;
-
     });
-    this.setState({ tokens: tokens, expiredCount: expiredCount }, this.calculateTotal);
+    this.setState(
+      { tokens: tokens, expiredCount: expiredCount },
+      this.calculateTotal
+    );
   }
 
-  handleTokenClick(tokenId){
+  handleTokenClick(tokenId) {
     // modify the token in the state
     let tokens = this.state.tokens;
     let token = tokens.find((token) => token.definitionId === tokenId);
@@ -132,7 +134,9 @@ class App extends Component {
     const total = tokens.length;
     const claimed = tokens.filter((token) => token.claimed).length;
 
-    const missed = tokens.filter((token) => !token.claimed && token.expired).length;
+    const missed = tokens.filter(
+      (token) => !token.claimed && token.expired
+    ).length;
 
     const max = total - missed;
 
@@ -164,38 +168,11 @@ class App extends Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <div className={"logo"}>
-          <img className={"logo__img"} src={Logo} alt="FUT23 Pack Collector" />
-          <div className={"logo__twitter"}>
-            <a
-              href="https://twitter.com/FUTCoder"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="Twitter Logo" src={Twitter} /> FUT Coder
-            </a>{" "}
-            x{" "}
-            <a
-              href="https://twitter.com/Kimpembro"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="Twitter Logo" src={Twitter} /> Kimpembro
-            </a>{" "}
-            x{" "}
-            <a
-              href="https://twitter.com/Fleck_GFX"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <img alt="Twitter Logo" src={Twitter} /> Fleck
-            </a>
-          </div>
-        </div>
-        <div id="counters">
+        <div className={"headerArea"}>
+          <div id="counters">
             <div className={"counter__item"}>
-            <div className={"counter__title"}>Total</div>
-            <div className={"counter__value"}>{this.state.total}</div>
+              <div className={"counter__title"}>Total</div>
+              <div className={"counter__value"}>{this.state.total}</div>
             </div>
             <div className={"counter__item"}>
               <div className={"counter__title"}>Claimed</div>
@@ -213,8 +190,44 @@ class App extends Component {
               <div className={"counter__title"}>Max</div>
               <div className={"counter__value"}>{this.state.max}</div>
             </div>
-
+          </div>
+          <div className={"logo"}>
+            <img
+              className={"logo__img"}
+              src={Logo}
+              alt="FUT23 Pack Collector"
+            />
+            <div className={"logo__twitter"}>
+              <a
+                href="https://twitter.com/FUTCoder"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <img alt="Twitter Logo" src={Twitter} /> FUT Coder
+              </a>{" "}
+              x{" "}
+              <a
+                href="https://twitter.com/Kimpembro"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <img alt="Twitter Logo" src={Twitter} /> Kimpembro
+              </a>{" "}
+              x{" "}
+              <a
+                href="https://twitter.com/Fleck_GFX"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <img alt="Twitter Logo" src={Twitter} /> Fleck
+              </a>
+            </div>
+          </div>
+          <div className={"controls"}>
+            Buttons etc 
+          </div>
         </div>
+
         <div id="tokens">
           {this.state.tokens.length > 0 &&
             this.state.tokens.map((token) => {
@@ -226,7 +239,11 @@ class App extends Component {
                 tokenClassName += " expired";
               }
               return (
-                <div onClick={() => this.handleTokenClick(token.definitionId)} key={token.definitionId} className={tokenClassName}>
+                <div
+                  onClick={() => this.handleTokenClick(token.definitionId)}
+                  key={token.definitionId}
+                  className={tokenClassName}
+                >
                   <img className="background" src={WcToken} alt="WC Token" />
                   {token.bestQualityImage === "futbin" && (
                     <img
@@ -262,7 +279,8 @@ class App extends Component {
                       : token.lastName}
                   </div>
                   <div className="expiry">
-                    {token.expired ? "Expired" : token.expiry + " LEFT"}<br/>
+                    {token.expired ? "Expired" : token.expiry + " LEFT"}
+                    <br />
                     {token.swap_source}
                     {token.swap_source_type === "sbc" && (
                       <img src={SBC} className="sbc-icon" alt="SBC" />
