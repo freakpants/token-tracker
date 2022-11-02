@@ -22,6 +22,9 @@ class App extends Component {
       tokens: [],
       total: 0,
       claimed: 0,
+      expiredCount: 0,
+      missed: 0,
+      max: 0,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -87,6 +90,7 @@ class App extends Component {
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
+    let expiredCount = 0;
     tokens.forEach((token) => {
       // calculate and add expiry difference in days
       let expiry = new Date(token.swap_expiry);
@@ -95,6 +99,7 @@ class App extends Component {
       let diff = expiry.getTime() - today.getTime();
       if(diff < 0){
         token.expired = true;
+        expiredCount++;
       } else {
         let days = Math.ceil(diff / (1000 * 3600 * 24));
         if (days < 4) {
@@ -110,7 +115,7 @@ class App extends Component {
       token.claimed = Math.random() < 0.5;
 
     });
-    this.setState({ tokens: tokens }, this.calculateTotal);
+    this.setState({ tokens: tokens, expiredCount: expiredCount }, this.calculateTotal);
   }
 
   handleTokenClick(tokenId){
@@ -123,10 +128,15 @@ class App extends Component {
 
   calculateTotal() {
     // calculate the total number of tokens and the number of claimed tokens
-    let tokens = this.state.tokens;
-    let total = tokens.length;
-    let claimed = tokens.filter((token) => token.claimed).length;
-    this.setState({ total: total, claimed: claimed });
+    const tokens = this.state.tokens;
+    const total = tokens.length;
+    const claimed = tokens.filter((token) => token.claimed).length;
+
+    const missed = tokens.filter((token) => !token.claimed && token.expired).length;
+
+    const max = total - missed;
+
+    this.setState({ total: total, claimed: claimed, missed: missed, max: max });
   }
 
   render() {
@@ -183,10 +193,27 @@ class App extends Component {
           </div>
         </div>
         <div id="counters">
-            <div className={"counter__title"}>Total Tokens</div>
+            <div className={"counter__item"}>
+            <div className={"counter__title"}>Total</div>
             <div className={"counter__value"}>{this.state.total}</div>
-            <div className={"counter__title"}>Claimed Tokens</div>
-            <div className={"counter__value"}>{this.state.claimed}</div>
+            </div>
+            <div className={"counter__item"}>
+              <div className={"counter__title"}>Claimed</div>
+              <div className={"counter__value"}>{this.state.claimed}</div>
+            </div>
+            <div className={"counter__item"}>
+              <div className={"counter__title"}>Expired</div>
+              <div className={"counter__value"}>{this.state.expiredCount}</div>
+            </div>
+            <div className={"counter__item"}>
+              <div className={"counter__title"}>Missed</div>
+              <div className={"counter__value"}>{this.state.missed}</div>
+            </div>
+            <div className={"counter__item"}>
+              <div className={"counter__title"}>Max</div>
+              <div className={"counter__value"}>{this.state.max}</div>
+            </div>
+
         </div>
         <div id="tokens">
           {this.state.tokens.length > 0 &&

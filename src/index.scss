@@ -44,7 +44,7 @@ input:disabled{
 
 body {
   background-color: $dark-black;
-  background-image: url('assets/worldcup.png');
+  background-image: url('assets/worldcup_dark.png');
   background-size: cover;
   background-attachment: fixed;
   margin: 0;
@@ -70,10 +70,10 @@ h1 {
   &__twitter {
     margin-top: 1rem;
     font-size: 1rem;
-    color: $dark-black;
+    color:$beige;
 
     & a {
-      color: $dark-black;
+      color: $beige;
       text-decoration: none;
       text-transform: uppercase;
       margin-right: 1rem;
@@ -765,10 +765,13 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .expiry{
   position: relative;
-  background: white;
-  color: black;
+  background-color: rgba(0,0,0,0.5);
+  color: $white;
   text-align: center;
   border-radius: 18px;
+  font-size:15px;
+  font-weight: 600;
+  line-height: 20px;
 }
 
 .counter{
@@ -780,7 +783,7 @@ label:not(.MuiFormControlLabel-root)::before{
   text-align: center;
   color: black;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 18px;
 }
 
 
@@ -828,8 +831,8 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .sbc-icon, .xp-icon, .pack-icon{
   position: absolute;
-  left: -2%;
-  top: -9%;
+  left: -8%;
+  top: 10%;
   width: 30px;
 }
 
@@ -863,12 +866,25 @@ label:not(.MuiFormControlLabel-root)::before{
 }
 
 #counters{
-  background-color: white;
+  background-color: rgba(0,0,0,0.5);
   position: absolute;
   top: 3%;
   left: 3%;
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 1.3rem;
+  display: flex;
+  gap: 20px;
+  text-transform: uppercase;
+  border-radius: 50px;
+}
+
+.counter__title{
+  color: $beige;
+}
+
+.counter__value{
+  color: $white;
+  text-align: center;
 }
 
 .token.expired{
