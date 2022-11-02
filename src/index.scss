@@ -750,24 +750,123 @@ label:not(.MuiFormControlLabel-root)::before{
     flex-wrap: wrap;
     gap: 28px;
     justify-content: center;
+    margin-top: 25px;
 }
 
-.name{
-  line-height: 28px;
-  text-transform: uppercase;
-  width: 100%;
+
+.name, .rating,.mainPosition, .expiry, .counter{
+  color: white;
   font-size: 16px;
   font-weight: 500;
-  color: white;
-  bottom: 8%;
   position: absolute;
+  line-height: 28px;
+  text-transform: uppercase;
+}
+
+.expiry{
+  position: relative;
+  background: white;
+  color: black;
+  text-align: center;
+  border-radius: 18px;
+}
+
+.counter{
+  top: -7%;
+  left: 40%;
+  background: #edeceb;
+  border-radius: 14px;
+  width: 28px;
+  text-align: center;
+  color: black;
+  font-weight: 600;
+  font-size: 22px;
+}
+
+
+.name{
+  width: 100%;
+  top: 57%;
   text-align: center;
   font-weight: 600;
+  font-size: 20px;
+}
+
+.rating{
+  top: 5%;
+  left: 9%;
+  font-size: 22px;
+}
+
+.mainPosition{
+  top: 15%;
+  left: 7%;
+  text-align: center;
+  width: 23px;
 }
 
 .avatar{
   position: absolute;
   right: 4%;
-  top: 17%;
+  top: 12.5%;
   width: 90px;
+}
+
+.nation{
+  position: absolute;
+  left: 4%;
+  top: 29%;
+  width: 30px;
+}
+
+.club{
+  position: absolute;
+  left: 4%;
+  top: 40%;
+  width: 30px;
+}
+
+.sbc-icon, .xp-icon, .pack-icon{
+  position: absolute;
+  left: -2%;
+  top: -9%;
+  width: 30px;
+}
+
+.pack-icon{
+  width: 20px;
+}
+
+.token.claimed::before{
+  color: #30cd30;
+  content: "\E009";
+  font-family: UltimateTeam-Icons, sans-serif;
+  text-decoration: none;
+    text-transform: none;
+    font-size: 3rem;
+    position: absolute;
+    top: 30px;
+    left: 46px;
+    z-index: 1;
+}
+
+.token.claimed img{
+  filter: grayscale(75);
+}
+
+.token.claimed .expiry{
+  display: none;
+}
+
+.token{
+  cursor: pointer;
+}
+
+#counters{
+  background-color: white;
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  padding: 1rem;
+  font-size: 1rem;
 }

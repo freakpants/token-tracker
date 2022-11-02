@@ -1,11 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { GoogleAuthProvider, getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFunctions } from "firebase/functions";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
@@ -15,13 +11,21 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
 import WcToken from "./assets/wctoken.png";
+import SBC from "./assets/sbc.png";
+import XP from "./assets/xp.png";
+import PACK from "./assets/pack.png";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tokens: [],	
+      tokens: [],
+      total: 0,
+      claimed: 0,
     };
+
+    this.handleTokenClick = this.handleTokenClick.bind(this);
+    this.calculateTotal = this.calculateTotal.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -81,9 +85,43 @@ class App extends Component {
   }
 
   componentDidMount() {
-        // get the players from the json file
-        let tokens = require("./Tokens.json");
-        this.setState({ tokens: tokens });
+    // get the players from the json file
+    let tokens = require("./Tokens.json");
+    tokens.forEach((token) => {
+      // calculate and add expiry difference in days
+      let expiry = new Date(token.swap_expiry);
+      expiry.setUTCHours(17, 0, 0, 0);
+      let today = new Date();
+      let diff = expiry.getTime() - today.getTime();
+      let days = Math.ceil(diff / (1000 * 3600 * 24));
+      if (days < 4) {
+        // calculate and add expiry difference in hours and minutes
+        let hours = Math.floor(diff / (1000 * 3600));
+        let minutes = Math.floor((diff % (1000 * 3600)) / (1000 * 60));
+        token.expiry = `${hours}h ${minutes}m`;
+      } else {
+        token.expiry = days + " days";
+      }
+      // randomly assign claimed
+      token.claimed = Math.random() < 0.5;
+    });
+    this.setState({ tokens: tokens }, this.calculateTotal);
+  }
+
+  handleTokenClick(tokenId){
+    // modify the token in the state
+    let tokens = this.state.tokens;
+    let token = tokens.find((token) => token.definitionId === tokenId);
+    token.claimed = !token.claimed;
+    this.setState({ tokens: tokens }, this.calculateTotal);
+  }
+
+  calculateTotal() {
+    // calculate the total number of tokens and the number of claimed tokens
+    let tokens = this.state.tokens;
+    let total = tokens.length;
+    let claimed = tokens.filter((token) => token.claimed).length;
+    this.setState({ total: total, claimed: claimed });
   }
 
   render() {
@@ -109,34 +147,99 @@ class App extends Component {
       },
     });
 
-    console.log(this.state.tokens);
-
     return (
       <ThemeProvider theme={theme}>
         <div className={"logo"}>
           <img className={"logo__img"} src={Logo} alt="FUT23 Pack Collector" />
           <div className={"logo__twitter"}>
-            <a href="https://twitter.com/FUTCoder" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> FUT Coder</a> x{" "}
-            <a href="https://twitter.com/Kimpembro" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> Kimpembro</a> x{" "}
-            <a href="https://twitter.com/Fleck_GFX" rel="noreferrer" target="_blank"><img alt="Twitter Logo" src={Twitter} /> Fleck</a></div>
+            <a
+              href="https://twitter.com/FUTCoder"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <img alt="Twitter Logo" src={Twitter} /> FUT Coder
+            </a>{" "}
+            x{" "}
+            <a
+              href="https://twitter.com/Kimpembro"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <img alt="Twitter Logo" src={Twitter} /> Kimpembro
+            </a>{" "}
+            x{" "}
+            <a
+              href="https://twitter.com/Fleck_GFX"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <img alt="Twitter Logo" src={Twitter} /> Fleck
+            </a>
+          </div>
+        </div>
+        <div id="counters">
+            <div className={"counter__title"}>Total Tokens</div>
+            <div className={"counter__value"}>{this.state.total}</div>
+            <div className={"counter__title"}>Claimed Tokens</div>
+            <div className={"counter__value"}>{this.state.claimed}</div>
         </div>
         <div id="tokens">
-        {this.state.tokens.length > 0 && (
-          this.state.tokens.map((token) => {
-            return (
-              
-              <div key={token.definitionId} className={"token"}>
-                <img className="background" src={WcToken} alt="WC Token" />
-                {token.bestQualityImage === "futbin" && (
-                  <img className="avatar" src={"https://cdn.futbin.com/content/fifa23/img/players/" + token.playerId + ".png"} />
-                )}
-                <div className="name">{token.knownAs ? token.knownAs : token.lastName}</div>
-              </div>
-              
-            );
-          })
-         )}
-         </div>
+          {this.state.tokens.length > 0 &&
+            this.state.tokens.map((token) => {
+              return (
+                <div onClick={() => this.handleTokenClick(token.definitionId)} key={token.definitionId} className={token.claimed ? "token claimed" : "token"}>
+                  <img className="background" src={WcToken} alt="WC Token" />
+                  {token.bestQualityImage === "futbin" && (
+                    <img
+                      className="avatar"
+                      src={
+                        "https://cdn.futbin.com/content/fifa23/img/players/" +
+                        token.playerId +
+                        ".png"
+                      }
+                    />
+                  )}
+                  <div className="rating">{token.rating}</div>
+                  <div className="mainPosition">{token.mainPosition}</div>
+                  <img
+                    className="nation"
+                    src={
+                      "https://cdn.futbin.com/content/fifa23/img/nation/" +
+                      token.nationId +
+                      ".png"
+                    }
+                  />
+                  <img
+                    className="club"
+                    src={
+                      "https://cdn.futbin.com/content/fifa23/img/clubs/" +
+                      token.teamId +
+                      ".png"
+                    }
+                  />
+                  <div className="name">
+                    {token.knownAs && token.knownAs !== "---"
+                      ? token.knownAs
+                      : token.lastName}
+                  </div>
+                  <div className="expiry">
+                    {token.expiry} LEFT<br/>
+                    {token.swap_source}
+                    {token.swap_source_type === "sbc" && (
+                      <img src={SBC} className="sbc-icon" alt="SBC" />
+                    )}
+                    {token.swap_source_type === "objective" && (
+                      <img src={XP} className="xp-icon" alt="Objective" />
+                    )}
+                    {token.swap_source_type === "pack" && (
+                      <img src={PACK} className="pack-icon" alt="Pack" />
+                    )}
+                  </div>
+                  <div className="counter">{token.swap_id}</div>
+                </div>
+              );
+            })}
+        </div>
       </ThemeProvider>
     );
   }
