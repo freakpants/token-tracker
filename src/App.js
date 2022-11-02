@@ -1,10 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  onAuthStateChanged,
+  signInWithRedirect,
+} from "firebase/auth";
 import { getDatabase, set, ref } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { Button } from "@mui/material";
+import { Button, Paper, FormGroup} from "@mui/material";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -27,13 +32,13 @@ class App extends Component {
       max: 0,
       user: null,
       profile: "default",
+      profiles: ["Default"],
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
     this.triggerGoogleLogin = this.triggerGoogleLogin.bind(this);
     this.saveTokens = this.saveTokens.bind(this);
-
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -61,7 +66,6 @@ class App extends Component {
     this.appCheck = appCheck;
 
     this.fireApp = fireApp;
-
 
     const analytics = getAnalytics(fireApp);
     this.analytics = analytics;
@@ -95,8 +99,7 @@ class App extends Component {
   }
 
   saveTokens() {
-
-    if(this.state.user) {
+    if (this.state.user) {
       const { tokens, profile } = this.state;
       const { uid } = this.state.user;
 
@@ -104,16 +107,17 @@ class App extends Component {
       const tokensToSave = [];
 
       tokens.map((token) => {
-        tokensToSave[token.definitionId]= {
+        tokensToSave[token.definitionId] = {
           claimed: token.claimed,
         };
       });
-  
+
       // save to firebase realtime database
-      set(ref(this.database, `tokens/worldcup/${uid}/${profile}`), tokensToSave );
+      set(
+        ref(this.database, `tokens/worldcup/${uid}/${profile}`),
+        tokensToSave
+      );
     }
-
-
   }
 
   componentDidMount() {
@@ -169,7 +173,10 @@ class App extends Component {
 
     const max = total - missed;
 
-    this.setState({ total: total, claimed: claimed, missed: missed, max: max }, this.saveTokens);
+    this.setState(
+      { total: total, claimed: claimed, missed: missed, max: max },
+      this.saveTokens
+    );
   }
 
   render() {
@@ -198,29 +205,33 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
-          <div id="counter__wrapper">          <div id="counters">
-            <div className={"counter__item"}>
-              <div className={"counter__title"}>Total</div>
-              <div className={"counter__value"}>{this.state.total}</div>
+          <div id="counter__wrapper">
+            {" "}
+            <div id="counters">
+              <div className={"counter__item"}>
+                <div className={"counter__title"}>Total</div>
+                <div className={"counter__value"}>{this.state.total}</div>
+              </div>
+              <div className={"counter__item"}>
+                <div className={"counter__title"}>Claimed</div>
+                <div className={"counter__value"}>{this.state.claimed}</div>
+              </div>
+              <div className={"counter__item"}>
+                <div className={"counter__title"}>Expired</div>
+                <div className={"counter__value"}>
+                  {this.state.expiredCount}
+                </div>
+              </div>
+              <div className={"counter__item"}>
+                <div className={"counter__title"}>Missed</div>
+                <div className={"counter__value"}>{this.state.missed}</div>
+              </div>
+              <div className={"counter__item"}>
+                <div className={"counter__title"}>Max</div>
+                <div className={"counter__value"}>{this.state.max}</div>
+              </div>
             </div>
-            <div className={"counter__item"}>
-              <div className={"counter__title"}>Claimed</div>
-              <div className={"counter__value"}>{this.state.claimed}</div>
-            </div>
-            <div className={"counter__item"}>
-              <div className={"counter__title"}>Expired</div>
-              <div className={"counter__value"}>{this.state.expiredCount}</div>
-            </div>
-            <div className={"counter__item"}>
-              <div className={"counter__title"}>Missed</div>
-              <div className={"counter__value"}>{this.state.missed}</div>
-            </div>
-            <div className={"counter__item"}>
-              <div className={"counter__title"}>Max</div>
-              <div className={"counter__value"}>{this.state.max}</div>
-            </div>
-          </div></div>
-
+          </div>
 
           <div className={"logo"}>
             {/* <img
@@ -228,12 +239,8 @@ class App extends Component {
               src={Logo}
               alt="FUT23 Pack Collector"
             /> */}
-            <div className={"logo__title"}>
-              World Cup 2022
-            </div>            
-            <div className={"logo__subtitle"}>
-              Token Tracker
-            </div>
+            <div className={"logo__title"}>World Cup 2022</div>
+            <div className={"logo__subtitle"}>Token Tracker</div>
             <div className={"logo__twitter"}>
               <a
                 href="https://twitter.com/FUTCoder"
@@ -260,24 +267,35 @@ class App extends Component {
               </a>
             </div>
           </div>
-          <div className={"controls"}>
-          {!this.state.user && (
-          <img
-            alt="Google Login"
-            onClick={this.triggerGoogleLogin}
-            src={
-              "https://developers.google.com/static/identity/images/btn_google_signin_dark_normal_web.png"
-            }
-          />
-        )}
-          {this.state.user && (
-          <div className={"cloudArea"}>
-            <div className={"displayName"}>
-              Logged in as {this.state.user.displayName}
-            </div>
-            <div></div>
-          </div>
-        )}
+          <div className={"filter"}>
+            <Paper elevation={0}>
+              {!this.state.user && (
+                <img
+                  alt="Google Login"
+                  onClick={this.triggerGoogleLogin}
+                  src={
+                    "https://developers.google.com/static/identity/images/btn_google_signin_dark_normal_web.png"
+                  }
+                />
+              )}
+              {this.state.user && (
+                <React.Fragment>
+                  <div className={"displayName"}>
+                    Logged in as {this.state.user.displayName}
+                  </div>
+                  <FormGroup>
+                    <div className={"filter__item"}>
+                      <select name="profile">
+                        {this.state.profiles.map((profile) => (
+                          <option value={profile}>{profile}</option>
+                        ))}
+                      </select>
+                      <label htmlFor="profile">Profile</label>
+                    </div>
+                  </FormGroup>
+                </React.Fragment>
+              )}
+            </Paper>
           </div>
         </div>
 

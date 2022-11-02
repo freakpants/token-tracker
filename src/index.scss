@@ -127,10 +127,10 @@ h1 {
   // justify-content: center;
   // flex-direction: column;
   border-radius: .5rem;
-  margin: 1rem auto;
   border: 1px dashed $beige;
   text-align: center;
-  width: 85%;
+  padding: 1rem;
+  background-color: #2d2823;
 
   @media only screen and (max-width: 768px) {
       justify-content: center;
@@ -181,6 +181,9 @@ h1 {
     background-color: #2d2823;
     color: $beige;
     border-radius: .5rem!important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   & button {
@@ -220,7 +223,6 @@ h1 {
     font-size: 1.2rem;
     background-color: $light-gray;
     padding: 0 1rem;
-    min-width: 25rem;
     font-weight: normal;
     border: 1px solid $lighter-gray;
     border-radius: .5rem;
