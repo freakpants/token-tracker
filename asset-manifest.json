@@ -1,22 +1,24 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.77f1bcb2.css",
-    "main.js": "/token-tracker/static/js/main.1405896c.js",
+    "main.css": "/token-tracker/static/css/main.4e809e6c.css",
+    "main.js": "/token-tracker/static/js/main.9b3d9f06.js",
     "static/media/worldcup.png": "/token-tracker/static/media/worldcup.b8f3597c26105eb81b6a.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
-    "static/media/wctoken.png": "/token-tracker/static/media/wctoken.56e7bf05b58d09db652a.png",
+    "static/media/wctoken.png": "/token-tracker/static/media/wctoken.92bb7bf2025936f32f70.png",
     "static/media/MATROSKA.ttf.woff": "/token-tracker/static/media/MATROSKA.ttf.c4d124f2a20b28b05975.woff",
     "static/media/UltimateTeamCondensed.woff": "/token-tracker/static/media/UltimateTeamCondensed.faca749167dc9d71ff77.woff",
+    "static/media/pack.png": "/token-tracker/static/media/pack.86f905920f1508e35652.png",
     "static/media/logopc.png": "/token-tracker/static/media/logopc.25111a6cfb159414b01f.png",
     "static/media/UltimateTeam-Icons.woff": "/token-tracker/static/media/UltimateTeam-Icons.4ce90d80cd304b60c8f0.woff",
+    "static/media/xp.png": "/token-tracker/static/media/xp.7f815605e92871829864.png",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.77f1bcb2.css.map": "/token-tracker/static/css/main.77f1bcb2.css.map",
-    "main.1405896c.js.map": "/token-tracker/static/js/main.1405896c.js.map"
+    "main.4e809e6c.css.map": "/token-tracker/static/css/main.4e809e6c.css.map",
+    "main.9b3d9f06.js.map": "/token-tracker/static/js/main.9b3d9f06.js.map"
   },
   "entrypoints": [
-    "static/css/main.77f1bcb2.css",
-    "static/js/main.1405896c.js"
+    "static/css/main.4e809e6c.css",
+    "static/js/main.9b3d9f06.js"
   ]
 }
