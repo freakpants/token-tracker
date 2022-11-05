@@ -38,11 +38,12 @@ $gray-blue: #2d2f34;
 $white: #fff;
 $beige: #F8EEDE;
 $orange: #ff6a00;
+$wc-red: #b90040;
 $base-font-size: 14px;
 $base-font-family: 'UltimateTeamCondensed', sans-serif;
 $title-font-family: 'MATROSKA';
 
-$primary-color: $orange;
+$primary-color: $wc-red;
 @import 'loaders.css/src/animations/line-scale.scss';
 
 
@@ -190,6 +191,7 @@ h1 {
     color: $white;
     font-family: 'UltimateTeamCondensed';
     font-size: 1rem;
+    margin-top: -15px;
   }
 
   & .MuiTypography-body1{
@@ -735,10 +737,10 @@ h1 {
 }
 
 .loader{
-  transform: scale(3);
+  transform: scale(1);
   transform-origin: center;
-  bottom: 50%;
-  position: absolute;
+  /* bottom: 50%; */
+  position: relative;
 }
 
 label:not(.MuiFormControlLabel-root){

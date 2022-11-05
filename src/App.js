@@ -7,9 +7,9 @@ import {
   onAuthStateChanged,
   signInWithRedirect,
 } from "firebase/auth";
-import { getDatabase, set, ref } from "firebase/database";
+import { getDatabase, set, ref, onValue } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { Button, Paper, FormGroup} from "@mui/material";
+import { Button, Paper, FormGroup } from "@mui/material";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -19,6 +19,7 @@ import WcTokenNew from "./assets/wctokennew.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
+import Loader from "react-loaders";
 
 class App extends Component {
   constructor(props) {
@@ -32,13 +33,15 @@ class App extends Component {
       max: 0,
       user: null,
       profile: "default",
-      profiles: ["Default"],
+      profiles: ["default", "rtg"],
+      loggingIn: true,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
     this.triggerGoogleLogin = this.triggerGoogleLogin.bind(this);
     this.saveTokens = this.saveTokens.bind(this);
+    this.triggerGoogleLogout = this.triggerGoogleLogout.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -84,12 +87,35 @@ class App extends Component {
         // write user object to local storage
         localStorage.setItem("user", JSON.stringify(user));
 
-        this.setState({ user: user });
+        // get tokens from firebase
+        const { uid } = user;
+        const profile = this.state.profile;
+        const tokensRef = ref(this.database, `tokens/worldcup/${uid}/${profile}`);
+        onValue(tokensRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            // go through each token and set claimed status if it was in the data
+            const tokens = this.state.tokens;
+            tokens.map((token) => {
+              // check if this tokens definition id is in the data
+              if (data.includes(token.definitionId)) {
+                token.claimed = true;
+              } 
+              return token;
+            }
+            );
+            console.log("setting tokens from firebase");
+            this.setState({ tokens: tokens }, this.calculateTotal);
+          }
+        });
+
+
+        this.setState({ user: user, loggingIn: false });
       } else {
         // User is signed out
         localStorage.setItem("user", JSON.stringify(user));
 
-        this.setState({ user: false });
+        this.setState({ user: false, loggingIn: false });
       }
     });
   }
@@ -98,19 +124,25 @@ class App extends Component {
     signInWithRedirect(this.auth, this.GoogleAuthProvider);
   }
 
+  triggerGoogleLogout() {
+    this.auth.signOut();
+  }
+
   saveTokens() {
+    console.log("saving tokens");
+    const { tokens, profile } = this.state;
+
+    // only keep claimed status of tokens
+    const tokensToSave = [];
+
+    tokens.map((token) => {
+      if(token.claimed) {
+        tokensToSave.push(token.definitionId);
+      }
+    });
+
     if (this.state.user) {
-      const { tokens, profile } = this.state;
       const { uid } = this.state.user;
-
-      // only keep claimed status of tokens
-      const tokensToSave = [];
-
-      tokens.map((token) => {
-        tokensToSave[token.definitionId] = {
-          claimed: token.claimed,
-        };
-      });
 
       // save to firebase realtime database
       set(
@@ -118,12 +150,44 @@ class App extends Component {
         tokensToSave
       );
     }
+
+    // save to local storage
+    const tokenStorage = {
+      [profile]: tokensToSave,
+    };
+    localStorage.setItem("tokens", JSON.stringify(tokenStorage));
+    this.calculateTotal();
   }
 
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
     let expiredCount = 0;
+
+    // check if we have a local profile
+    const profile = localStorage.getItem("profile");
+    if (!profile) {
+      // save selected profile to local storage
+      localStorage.setItem("profile", this.state.profile);
+      // save all profiles to local storage
+      localStorage.setItem("profiles", JSON.stringify(this.state.profiles));
+    }
+
+    // check if we have a local token storage
+    const tokenStorage = localStorage.getItem("tokens");
+    if (tokenStorage) {
+      // get the tokens from local storage
+      const tokensFromStorage = JSON.parse(tokenStorage);
+      // get the tokens for the selected profile
+      const tokensForProfile = tokensFromStorage[this.state.profile];
+      // loop through the tokens and set the claimed status
+      tokens.map((token) => {
+        if (tokensForProfile.includes(token.definitionId)) {
+          token.claimed = true;
+        }
+      });
+    }
+
     tokens.forEach((token) => {
       // calculate and add expiry difference in days
       let expiry = new Date(token.swap_expiry);
@@ -144,9 +208,8 @@ class App extends Component {
           token.expiry = days + " days";
         }
       }
-      // randomly assign claimed
-      token.claimed = Math.random() < 0.5;
     });
+    console.log("setting initial token state");
     this.setState(
       { tokens: tokens, expiredCount: expiredCount },
       this.calculateTotal
@@ -158,10 +221,11 @@ class App extends Component {
     let tokens = this.state.tokens;
     let token = tokens.find((token) => token.definitionId === tokenId);
     token.claimed = !token.claimed;
-    this.setState({ tokens: tokens }, this.calculateTotal);
+    this.setState({ tokens: tokens }, this.saveTokens);
   }
 
   calculateTotal() {
+    console.log("calculating total");
     // calculate the total number of tokens and the number of claimed tokens
     const tokens = this.state.tokens;
     const total = tokens.length;
@@ -174,8 +238,7 @@ class App extends Component {
     const max = total - missed;
 
     this.setState(
-      { total: total, claimed: claimed, missed: missed, max: max },
-      this.saveTokens
+      { total: total, claimed: claimed, missed: missed, max: max }
     );
   }
 
@@ -188,7 +251,7 @@ class App extends Component {
       },
       palette: {
         primary: {
-          main: "#ff6a00",
+          main: "#b90040",
         },
         secondary: {
           main: "#edf2ff",
@@ -269,7 +332,7 @@ class App extends Component {
           </div>
           <div className={"filter"}>
             <Paper elevation={0}>
-              {!this.state.user && (
+              {!this.state.user && !this.state.loggingIn && (
                 <img
                   alt="Google Login"
                   onClick={this.triggerGoogleLogin}
@@ -278,23 +341,31 @@ class App extends Component {
                   }
                 />
               )}
-              {this.state.user && (
+              {this.state.loggingIn && <Loader type="line-scale" active />}
+              {this.state.user && !this.state.loggingIn && (
                 <React.Fragment>
                   <div className={"displayName"}>
                     Logged in as {this.state.user.displayName}
                   </div>
-                  <FormGroup>
-                    <div className={"filter__item"}>
-                      <select name="profile">
-                        {this.state.profiles.map((profile) => (
-                          <option value={profile}>{profile}</option>
-                        ))}
-                      </select>
-                      <label htmlFor="profile">Profile</label>
-                    </div>
-                  </FormGroup>
+                  <Button
+                    onClick={this.triggerGoogleLogout}
+                    variant="contained"
+                  >
+                    Logout
+                  </Button>
                 </React.Fragment>
               )}
+
+              <FormGroup>
+                <div className={"filter__item"}>
+                  <select name="profile">
+                    {this.state.profiles.map((profile) => (
+                      <option value={profile}>{profile}</option>
+                    ))}
+                  </select>
+                  <label htmlFor="profile">Profile</label>
+                </div>
+              </FormGroup>
             </Paper>
           </div>
         </div>
