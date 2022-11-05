@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.4602bec5.css",
-    "main.js": "/token-tracker/static/js/main.c1cb0604.js",
+    "main.css": "/token-tracker/static/css/main.bb325162.css",
+    "main.js": "/token-tracker/static/js/main.57161517.js",
     "static/media/worldcup_dark.png": "/token-tracker/static/media/worldcup_dark.4c82ff050602fbb9a228.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
@@ -16,11 +16,11 @@
     "static/media/xp.png": "/token-tracker/static/media/xp.7f815605e92871829864.png",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.4602bec5.css.map": "/token-tracker/static/css/main.4602bec5.css.map",
-    "main.c1cb0604.js.map": "/token-tracker/static/js/main.c1cb0604.js.map"
+    "main.bb325162.css.map": "/token-tracker/static/css/main.bb325162.css.map",
+    "main.57161517.js.map": "/token-tracker/static/js/main.57161517.js.map"
   },
   "entrypoints": [
-    "static/css/main.4602bec5.css",
-    "static/js/main.c1cb0604.js"
+    "static/css/main.bb325162.css",
+    "static/js/main.57161517.js"
   ]
 }
