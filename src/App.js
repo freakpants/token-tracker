@@ -9,7 +9,10 @@ import {
 } from "firebase/auth";
 import { getDatabase, set, ref, onValue } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { Button, Paper, FormGroup } from "@mui/material";
+import { Button, Paper, FormGroup, IconButton, Tooltip, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import EditIcon from "@mui/icons-material/Edit";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -33,8 +36,9 @@ class App extends Component {
       max: 0,
       user: null,
       profile: "default",
-      profiles: ["default", "rtg"],
+      profiles: ["default"],
       loggingIn: true,
+      editingProfile: false,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -42,6 +46,7 @@ class App extends Component {
     this.triggerGoogleLogin = this.triggerGoogleLogin.bind(this);
     this.saveTokens = this.saveTokens.bind(this);
     this.triggerGoogleLogout = this.triggerGoogleLogout.bind(this);
+    this.handleAddProfile = this.handleAddProfile.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -90,7 +95,10 @@ class App extends Component {
         // get tokens from firebase
         const { uid } = user;
         const profile = this.state.profile;
-        const tokensRef = ref(this.database, `tokens/worldcup/${uid}/${profile}`);
+        const tokensRef = ref(
+          this.database,
+          `tokens/worldcup/${uid}/${profile}`
+        );
         onValue(tokensRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
@@ -100,15 +108,13 @@ class App extends Component {
               // check if this tokens definition id is in the data
               if (data.includes(token.definitionId)) {
                 token.claimed = true;
-              } 
+              }
               return token;
-            }
-            );
+            });
             console.log("setting tokens from firebase");
             this.setState({ tokens: tokens }, this.calculateTotal);
           }
         });
-
 
         this.setState({ user: user, loggingIn: false });
       } else {
@@ -136,7 +142,7 @@ class App extends Component {
     const tokensToSave = [];
 
     tokens.map((token) => {
-      if(token.claimed) {
+      if (token.claimed) {
         tokensToSave.push(token.definitionId);
       }
     });
@@ -158,6 +164,10 @@ class App extends Component {
     localStorage.setItem("tokens", JSON.stringify(tokenStorage));
     this.calculateTotal();
   }
+
+  handleAddProfile() {
+    this.setState({ editingProfile: true });
+  } 
 
   componentDidMount() {
     // get the players from the json file
@@ -237,9 +247,7 @@ class App extends Component {
 
     const max = total - missed;
 
-    this.setState(
-      { total: total, claimed: claimed, missed: missed, max: max }
-    );
+    this.setState({ total: total, claimed: claimed, missed: missed, max: max });
   }
 
   render() {
@@ -269,8 +277,9 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
           <div id="counter__wrapper">
-            {" "}
+          <div className={"logo__title"}>World Cup 2022</div>
             <div id="counters">
+            
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
                 <div className={"counter__value"}>{this.state.total}</div>
@@ -297,13 +306,11 @@ class App extends Component {
           </div>
 
           <div className={"logo"}>
-            {/* <img
+            <img
               className={"logo__img"}
               src={Logo}
-              alt="FUT23 Pack Collector"
-            /> */}
-            <div className={"logo__title"}>World Cup 2022</div>
-            <div className={"logo__subtitle"}>Token Tracker</div>
+              alt="FUT23 Token Tracker"
+            /> 
             <div className={"logo__twitter"}>
               <a
                 href="https://twitter.com/FUTCoder"
@@ -365,6 +372,41 @@ class App extends Component {
                   </select>
                   <label htmlFor="profile">Profile</label>
                 </div>
+                {! this.state.editingProfile && (
+                <React.Fragment>
+                <Tooltip title="Add new profile">
+                  <IconButton aria-label="add-profile" onClick={this.handleAddProfile} >
+                    <AddCircleIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Rename profile">
+                  <IconButton aria-label="rename-profile">
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>                <Tooltip title="Delete profile">
+                  <IconButton aria-label="delete-profile">
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip> </React.Fragment>)}
+
+                {this.state.editingProfile && (
+                  <React.Fragment>
+                                <div className="filter__item">
+                                <input
+                                  name="profileName"
+                                  id="profileName"
+                                  onChange={this.handleInputChange}
+                                  value={this.state.title}
+                                  placeholder="Profile Name"
+                                />
+                                <label htmlFor="title">Profile Name</label>
+                              </div>  
+                              <Typography variant="body2" color="textSecondary" component="p">
+                                Type the profile name. Click anywhere outside the input to save.
+                              </Typography>
+                  </React.Fragment>
+
+            )}
               </FormGroup>
             </Paper>
           </div>
