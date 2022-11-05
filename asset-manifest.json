@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/token-tracker/static/css/main.bb325162.css",
-    "main.js": "/token-tracker/static/js/main.57161517.js",
+    "main.css": "/token-tracker/static/css/main.c0f3c3ab.css",
+    "main.js": "/token-tracker/static/js/main.1f779bd6.js",
     "static/media/worldcup_dark.png": "/token-tracker/static/media/worldcup_dark.4c82ff050602fbb9a228.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
@@ -11,16 +11,16 @@
     "static/media/MATROSKA.ttf.woff": "/token-tracker/static/media/MATROSKA.ttf.c4d124f2a20b28b05975.woff",
     "static/media/UltimateTeamCondensed.woff": "/token-tracker/static/media/UltimateTeamCondensed.faca749167dc9d71ff77.woff",
     "static/media/pack.png": "/token-tracker/static/media/pack.86f905920f1508e35652.png",
-    "static/media/logopc.png": "/token-tracker/static/media/logopc.25111a6cfb159414b01f.png",
     "static/media/UltimateTeam-Icons.woff": "/token-tracker/static/media/UltimateTeam-Icons.4ce90d80cd304b60c8f0.woff",
+    "static/media/logopc.png": "/token-tracker/static/media/logopc.105b8d42376fd54e9063.png",
     "static/media/xp.png": "/token-tracker/static/media/xp.7f815605e92871829864.png",
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
-    "main.bb325162.css.map": "/token-tracker/static/css/main.bb325162.css.map",
-    "main.57161517.js.map": "/token-tracker/static/js/main.57161517.js.map"
+    "main.c0f3c3ab.css.map": "/token-tracker/static/css/main.c0f3c3ab.css.map",
+    "main.1f779bd6.js.map": "/token-tracker/static/js/main.1f779bd6.js.map"
   },
   "entrypoints": [
-    "static/css/main.bb325162.css",
-    "static/js/main.57161517.js"
+    "static/css/main.c0f3c3ab.css",
+    "static/js/main.1f779bd6.js"
   ]
 }
