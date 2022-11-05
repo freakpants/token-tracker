@@ -9,7 +9,14 @@ import {
 } from "firebase/auth";
 import { getDatabase, set, ref, onValue } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { Button, Paper, FormGroup, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Paper,
+  FormGroup,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
@@ -39,6 +46,8 @@ class App extends Component {
       profiles: ["default"],
       loggingIn: true,
       editingProfile: false,
+      mode: false,
+      profileNameInput: ""
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -47,6 +56,12 @@ class App extends Component {
     this.saveTokens = this.saveTokens.bind(this);
     this.triggerGoogleLogout = this.triggerGoogleLogout.bind(this);
     this.handleAddProfile = this.handleAddProfile.bind(this);
+    this.handleCancelProfile = this.handleCancelProfile.bind(this);
+    this.handleSaveProfile = this.handleSaveProfile.bind(this);
+    this.handleAddProfile = this.handleAddProfile.bind(this);
+    this.handleEditProfile = this.handleEditProfile.bind(this);
+    this.handleDeleteProfile =  this.handleDeleteProfile.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -166,9 +181,42 @@ class App extends Component {
   }
 
   handleAddProfile() {
-    this.setState({ editingProfile: true });
-  } 
+    this.setState({ profileNameInput: "", editingProfile: true, mode: "add" });
+  }
+  handleEditProfile() {
+    this.setState({ editingProfile: true, mode: "edit", profileNameInput: this.state.profile });
+  }
 
+  handleDeleteProfile() {
+    if(this.state.profiles.length > 1) {
+      if(window.confirm("Are you sure you want to delete this profile?")) {
+        const { profile } = this.state;
+        console.log("deleting profile", profile);
+        // remove from profiles array
+        const profiles = this.state.profiles.filter(p => p !== profile);
+        console.log(profiles);
+        this.setState({ profile: profiles[0], profiles: profiles });
+      }
+    }
+    else {
+      alert("You can't delete the only profile.");
+    }
+  }
+
+  handleSaveProfile() {
+    if(this.state.mode === "add") {
+      const profiles = this.state.profiles;
+      profiles.push(this.state.profileNameInput);
+      this.setState({ profiles: profiles, editingProfile: false, profile: this.state.profileNameInput });
+    } 
+    if(this.state.mode === "edit") {
+      const profiles = this.state.profiles;
+      const index = profiles.indexOf(this.state.profile);
+      profiles[index] = this.state.profileNameInput;
+      this.setState({ profiles: profiles, editingProfile: false, profile: this.state.profileNameInput });
+    }
+    this.setState({ editingProfile: false, mode: false });
+  }
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
@@ -226,6 +274,10 @@ class App extends Component {
     );
   }
 
+  handleCancelProfile(){
+    this.setState({ editingProfile: false });
+  }
+
   handleTokenClick(tokenId) {
     // modify the token in the state
     let tokens = this.state.tokens;
@@ -248,6 +300,16 @@ class App extends Component {
     const max = total - missed;
 
     this.setState({ total: total, claimed: claimed, missed: missed, max: max });
+  }
+
+  handleInputChange(event) {
+    let { name, value } = event.target;
+
+    this.setState(
+      {
+        [name]: value,
+      }
+    );
   }
 
   render() {
@@ -277,9 +339,8 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
           <div id="counter__wrapper">
-          <div className={"logo__title"}>World Cup 2022</div>
+            <div className={"logo__title"}>World Cup 2022</div>
             <div id="counters">
-            
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
                 <div className={"counter__value"}>{this.state.total}</div>
@@ -306,11 +367,7 @@ class App extends Component {
           </div>
 
           <div className={"logo"}>
-            <img
-              className={"logo__img"}
-              src={Logo}
-              alt="FUT23 Token Tracker"
-            /> 
+            <img className={"logo__img"} src={Logo} alt="FUT23 Token Tracker" />
             <div className={"logo__twitter"}>
               <a
                 href="https://twitter.com/FUTCoder"
@@ -365,48 +422,56 @@ class App extends Component {
 
               <FormGroup>
                 <div className={"filter__item"}>
-                  <select name="profile">
+                  <select name="profile" onChange={this.handleInputChange}>
                     {this.state.profiles.map((profile) => (
-                      <option value={profile}>{profile}</option>
+                      <option selected={profile === this.state.profile} value={profile}>{profile}</option>
                     ))}
                   </select>
                   <label htmlFor="profile">Profile</label>
                 </div>
-                {! this.state.editingProfile && (
-                <React.Fragment>
-                <Tooltip title="Add new profile">
-                  <IconButton aria-label="add-profile" onClick={this.handleAddProfile} >
-                    <AddCircleIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Rename profile">
-                  <IconButton aria-label="rename-profile">
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>                <Tooltip title="Delete profile">
-                  <IconButton aria-label="delete-profile">
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip> </React.Fragment>)}
+                {!this.state.editingProfile && (
+                  <React.Fragment>
+                    <Tooltip title="Add new profile">
+                      <IconButton
+                        aria-label="add-profile"
+                        onClick={this.handleAddProfile}
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Rename profile">
+                      <IconButton aria-label="rename-profile" onClick={this.handleEditProfile}>
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>{" "}
+                    <Tooltip title="Delete profile">
+                      <IconButton aria-label="delete-profile" onClick={this.handleDeleteProfile}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>{" "}
+                  </React.Fragment>
+                )}
 
                 {this.state.editingProfile && (
                   <React.Fragment>
-                                <div className="filter__item">
-                                <input
-                                  name="profileName"
-                                  id="profileName"
-                                  onChange={this.handleInputChange}
-                                  value={this.state.title}
-                                  placeholder="Profile Name"
-                                />
-                                <label htmlFor="title">Profile Name</label>
-                              </div>  
-                              <Typography variant="body2" color="textSecondary" component="p">
-                                Type the profile name. Click anywhere outside the input to save.
-                              </Typography>
+                    <div className="filter__item">
+                      <input
+                        name="profileNameInput"
+                        id="profileNameInput"
+                        onChange={this.handleInputChange}
+                        value={this.state.profileNameInput}
+                        placeholder="Profile Name"
+                      />
+                      <label htmlFor="title">Profile Name</label>
+                    </div>
+                    <Button onClick={this.handleSaveProfile} variant="contained">
+                      Save
+                    </Button>
+                    <Button onClick={this.handleCancelProfile} variant="contained">
+                      Cancel
+                    </Button>
                   </React.Fragment>
-
-            )}
+                )}
               </FormGroup>
             </Paper>
           </div>
