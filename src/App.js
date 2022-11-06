@@ -109,10 +109,14 @@ class App extends Component {
           let firstProfile = false;
           if (data) {
             profiles = Object.keys(data);
-            if(JSON.stringify(profiles) !== JSON.stringify(this.state.profiles)) {
+            if (
+              JSON.stringify(profiles) !== JSON.stringify(this.state.profiles)
+            ) {
               console.log("profiles in state", this.state.profiles);
               console.log("profiles in firebase", profiles);
-              console.log("setting profiles to cloud state and setting first cloud profile to active");
+              console.log(
+                "setting profiles to cloud state and setting first cloud profile to active"
+              );
               this.setState({ profiles: profiles, profile: profiles[0] });
             } else {
               // if we are overwriting the local profile state, we also need to set the tokens for the first of these profiles
@@ -120,14 +124,14 @@ class App extends Component {
             }
             // get tokens from firebase
             let tokenStorage = {};
-            
+
             profiles.forEach((profile) => {
               onValue(
                 ref(this.database, `tokens/worldcup/${uid}/${profile}`),
                 (snapshot) => {
                   const data = snapshot.val();
                   if (data) {
-                    if(profile === this.state.profile) {
+                    if (profile === this.state.profile) {
                       // go through each token and set claimed status if it was in the data
                       const tokens = this.state.tokens;
                       tokens.map((token) => {
@@ -140,7 +144,7 @@ class App extends Component {
                       console.log("setting tokens from firebase");
                       this.setState({ tokens: tokens }, this.calculateTotal);
                       firstProfile = false;
-                    } 
+                    }
                     tokenStorage[profile] = data;
                   }
                 }
@@ -194,11 +198,13 @@ class App extends Component {
     if (this.state.user) {
       const { uid } = this.state.user;
 
-      // save to firebase realtime database
-      set(
-        ref(this.database, `tokens/worldcup/${uid}/${profile}`),
-        tokensToSave
-      );
+      // save to firebase realtime database if there are more than zero tokens, otherwise firebase will delete the node
+      if (tokensToSave.length > 0) {
+        set(
+          ref(this.database, `tokens/worldcup/${uid}/${profile}`),
+          tokensToSave
+        );
+      }
     }
 
     // save to local storage
@@ -310,12 +316,13 @@ class App extends Component {
     let expiredCount = 0;
 
     // check if we have a local profile
-    const profile = localStorage.getItem("profile");
+    let profile = localStorage.getItem("profile");
     if (!profile) {
       // save selected profile to local storage
       localStorage.setItem("profile", this.state.profile);
       // save all profiles to local storage
       localStorage.setItem("profiles", JSON.stringify(this.state.profiles));
+      profile = this.state.profile;
     } else {
       // set profile from local storage
       this.setState({
@@ -329,9 +336,9 @@ class App extends Component {
     // get the tokens from local storage
     const tokensFromStorage = JSON.parse(tokenStorage);
 
-    if (tokenStorage && tokensFromStorage[this.state.profile]) {
+    if (tokenStorage && tokensFromStorage[profile]) {
       // get the tokens for the selected profile
-      const tokensForProfile = tokensFromStorage[this.state.profile];
+      const tokensForProfile = tokensFromStorage[profile];
       // loop through the tokens and set the claimed status
       tokens.map((token) => {
         if (tokensForProfile.includes(token.definitionId)) {
