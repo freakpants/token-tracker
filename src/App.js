@@ -106,19 +106,28 @@ class App extends Component {
         // get profiles from firebase
         onValue(ref(this.database, `tokens/worldcup/${uid}`), (snapshot) => {
           const data = snapshot.val();
+          let firstProfile = false;
           if (data) {
             profiles = Object.keys(data);
-            this.setState({ profiles: profiles, profile: profiles[0] });
+            if(JSON.stringify(profiles) !== JSON.stringify(this.state.profiles)) {
+              console.log("profiles in state", this.state.profiles);
+              console.log("profiles in firebase", profiles);
+              console.log("setting profiles to cloud state and setting first cloud profile to active");
+              this.setState({ profiles: profiles, profile: profiles[0] });
+            } else {
+              // if we are overwriting the local profile state, we also need to set the tokens for the first of these profiles
+              firstProfile = true;
+            }
             // get tokens from firebase
             let tokenStorage = {};
-            let firstProfile = true;
+            
             profiles.forEach((profile) => {
               onValue(
                 ref(this.database, `tokens/worldcup/${uid}/${profile}`),
                 (snapshot) => {
                   const data = snapshot.val();
                   if (data) {
-                    if(firstProfile) {
+                    if(profile === this.state.profile) {
                       // go through each token and set claimed status if it was in the data
                       const tokens = this.state.tokens;
                       tokens.map((token) => {
