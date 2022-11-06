@@ -136,7 +136,7 @@ h1 {
   @media only screen and (max-width: 768px) {
       justify-content: center;
       flex-direction: column;
-      width: 99%;
+      width: 90%;
   }
 
   &__checkboxes {
@@ -192,6 +192,8 @@ h1 {
     font-family: 'UltimateTeamCondensed';
     font-size: 1rem;
     margin-top: -15px;
+    width: 1rem;
+    height: 2.5rem;
   }
 
   & .MuiTypography-body1{
@@ -213,10 +215,10 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    gap: 1rem;
 
     @media only screen and (max-width: 768px) {
-      flex-direction: column;    
-      align-items: center;
+      flex-direction: row;    
     }
   }
 
@@ -965,4 +967,15 @@ label:not(.MuiFormControlLabel-root)::before{
     text-transform: uppercase;
     border-radius: 50px;
     height: 84px;
+}
+
+.MuiSvgIcon-root{
+  @media screen and (max-width: 768px) {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+}
+
+.MuiFormGroup-root .MuiButtonBase-root{
+  margin: 5px auto;
 }
