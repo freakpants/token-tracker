@@ -9,14 +9,7 @@ import {
 } from "firebase/auth";
 import { getDatabase, set, ref, onValue } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import {
-  Button,
-  Paper,
-  FormGroup,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Button, Paper, FormGroup, IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
@@ -24,7 +17,6 @@ import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
-import WcToken from "./assets/wctoken.png";
 import WcTokenNew from "./assets/wctokennew.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
@@ -47,7 +39,7 @@ class App extends Component {
       loggingIn: true,
       editingProfile: false,
       mode: false,
-      profileNameInput: ""
+      profileNameInput: "",
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -60,7 +52,7 @@ class App extends Component {
     this.handleSaveProfile = this.handleSaveProfile.bind(this);
     this.handleAddProfile = this.handleAddProfile.bind(this);
     this.handleEditProfile = this.handleEditProfile.bind(this);
-    this.handleDeleteProfile =  this.handleDeleteProfile.bind(this);
+    this.handleDeleteProfile = this.handleDeleteProfile.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
 
     // Your web app's Firebase configuration
@@ -127,10 +119,10 @@ class App extends Component {
               return token;
             });
             console.log("setting tokens from firebase");
-            this.setState({ tokens: tokens }, this.calculateTotal);
+            // this.setState({ tokens: tokens }, this.calculateTotal);
           }
         });
-
+        console.log("setting status to logged in");
         this.setState({ user: user, loggingIn: false });
       } else {
         // User is signed out
@@ -160,6 +152,7 @@ class App extends Component {
       if (token.claimed) {
         tokensToSave.push(token.definitionId);
       }
+      return token;
     });
 
     if (this.state.user) {
@@ -173,9 +166,8 @@ class App extends Component {
     }
 
     // save to local storage
-    const tokenStorage = {
-      [profile]: tokensToSave,
-    };
+    let tokenStorage = JSON.parse(localStorage.getItem("tokens"));
+    tokenStorage[profile] = tokensToSave;
     localStorage.setItem("tokens", JSON.stringify(tokenStorage));
     this.calculateTotal();
   }
@@ -184,39 +176,66 @@ class App extends Component {
     this.setState({ profileNameInput: "", editingProfile: true, mode: "add" });
   }
   handleEditProfile() {
-    this.setState({ editingProfile: true, mode: "edit", profileNameInput: this.state.profile });
+    this.setState({
+      editingProfile: true,
+      mode: "edit",
+      profileNameInput: this.state.profile,
+    });
+    localStorage.setItem("profiles", JSON.stringify(this.state.profiles));
+    localStorage.setItem("profile", this.state.profileNameInput);
   }
 
   handleDeleteProfile() {
-    if(this.state.profiles.length > 1) {
-      if(window.confirm("Are you sure you want to delete this profile?")) {
+    if (this.state.profiles.length > 1) {
+      if (window.confirm("Are you sure you want to delete this profile?")) {
         const { profile } = this.state;
         console.log("deleting profile", profile);
         // remove from profiles array
-        const profiles = this.state.profiles.filter(p => p !== profile);
+        const profiles = this.state.profiles.filter((p) => p !== profile);
         console.log(profiles);
-        this.setState({ profile: profiles[0], profiles: profiles });
+        this.setState({ profile: profiles[0], profiles: profiles }, () => {});
+        localStorage.setItem("profiles", JSON.stringify(profiles));
+        localStorage.setItem("profile", profiles[0]);
       }
-    }
-    else {
+    } else {
       alert("You can't delete the only profile.");
     }
   }
 
   handleSaveProfile() {
-    if(this.state.mode === "add") {
+    if (this.state.mode === "add") {
       const profiles = this.state.profiles;
       profiles.push(this.state.profileNameInput);
-      this.setState({ profiles: profiles, editingProfile: false, profile: this.state.profileNameInput });
-    } 
-    if(this.state.mode === "edit") {
-      const profiles = this.state.profiles;
+      // set all tokens to unclaimed
+      const tokens = this.state.tokens;
+      tokens.map((token) => {
+        token.claimed = false;
+        return token;
+      });
+
+      this.setState({
+        tokens: tokens,
+        profiles: profiles,
+        editingProfile: false,
+        profile: this.state.profileNameInput,
+      });
+    }
+    const profiles = this.state.profiles;
+    if (this.state.mode === "edit") {
       const index = profiles.indexOf(this.state.profile);
       profiles[index] = this.state.profileNameInput;
-      this.setState({ profiles: profiles, editingProfile: false, profile: this.state.profileNameInput });
+      this.setState({
+        profiles: profiles,
+        editingProfile: false,
+        profile: this.state.profileNameInput,
+      });
     }
     this.setState({ editingProfile: false, mode: false });
+    // save profiles to local storage
+    localStorage.setItem("profiles", JSON.stringify(profiles));
+    localStorage.setItem("profile", this.state.profileNameInput);
   }
+
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
@@ -229,6 +248,12 @@ class App extends Component {
       localStorage.setItem("profile", this.state.profile);
       // save all profiles to local storage
       localStorage.setItem("profiles", JSON.stringify(this.state.profiles));
+    } else {
+      // set profile from local storage
+      this.setState({
+        profile: profile,
+        profiles: JSON.parse(localStorage.getItem("profiles")),
+      });
     }
 
     // check if we have a local token storage
@@ -243,6 +268,7 @@ class App extends Component {
         if (tokensForProfile.includes(token.definitionId)) {
           token.claimed = true;
         }
+        return token;
       });
     }
 
@@ -274,7 +300,7 @@ class App extends Component {
     );
   }
 
-  handleCancelProfile(){
+  handleCancelProfile() {
     this.setState({ editingProfile: false });
   }
 
@@ -305,11 +331,27 @@ class App extends Component {
   handleInputChange(event) {
     let { name, value } = event.target;
 
-    this.setState(
-      {
+    if (name === "profile") {
+      // get the tokens for the selected profile
+      const tokensForProfile = JSON.parse(localStorage.getItem("tokens"))[
+        value
+      ];
+      // loop through the tokens and set the claimed status
+      let tokens = this.state.tokens;
+      tokens.map((token) => {
+        if (tokensForProfile.includes(token.definitionId)) {
+          token.claimed = true;
+        } else {
+          token.claimed = false;
+        }
+        return token;
+      });
+      this.setState({ [name]: value, tokens: tokens }, this.calculateTotal);
+    } else {
+      this.setState({
         [name]: value,
-      }
-    );
+      });
+    }
   }
 
   render() {
@@ -334,6 +376,8 @@ class App extends Component {
         },
       },
     });
+
+    console.log("trying to render");
 
     return (
       <ThemeProvider theme={theme}>
@@ -422,9 +466,15 @@ class App extends Component {
 
               <FormGroup>
                 <div className={"filter__item"}>
-                  <select name="profile" onChange={this.handleInputChange}>
+                  <select
+                    name="profile"
+                    onChange={this.handleInputChange}
+                    value={this.state.profile}
+                  >
                     {this.state.profiles.map((profile) => (
-                      <option selected={profile === this.state.profile} value={profile}>{profile}</option>
+                      <option key={profile} value={profile}>
+                        {profile}
+                      </option>
                     ))}
                   </select>
                   <label htmlFor="profile">Profile</label>
@@ -440,12 +490,18 @@ class App extends Component {
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Rename profile">
-                      <IconButton aria-label="rename-profile" onClick={this.handleEditProfile}>
+                      <IconButton
+                        aria-label="rename-profile"
+                        onClick={this.handleEditProfile}
+                      >
                         <EditIcon />
                       </IconButton>
                     </Tooltip>{" "}
                     <Tooltip title="Delete profile">
-                      <IconButton aria-label="delete-profile" onClick={this.handleDeleteProfile}>
+                      <IconButton
+                        aria-label="delete-profile"
+                        onClick={this.handleDeleteProfile}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>{" "}
@@ -464,10 +520,16 @@ class App extends Component {
                       />
                       <label htmlFor="title">Profile Name</label>
                     </div>
-                    <Button onClick={this.handleSaveProfile} variant="contained">
+                    <Button
+                      onClick={this.handleSaveProfile}
+                      variant="contained"
+                    >
                       Save
                     </Button>
-                    <Button onClick={this.handleCancelProfile} variant="contained">
+                    <Button
+                      onClick={this.handleCancelProfile}
+                      variant="contained"
+                    >
                       Cancel
                     </Button>
                   </React.Fragment>
@@ -497,6 +559,7 @@ class App extends Component {
                   {token.bestQualityImage === "futbin" && (
                     <img
                       className="avatar"
+                      alt="Player Avatar"
                       src={
                         "https://cdn.futbin.com/content/fifa23/img/players/" +
                         token.playerId +
@@ -508,6 +571,7 @@ class App extends Component {
                   <div className="mainPosition">{token.mainPosition}</div>
                   <img
                     className="nation"
+                    alt="Nation Flag"
                     src={
                       "https://cdn.futbin.com/content/fifa23/img/nation/" +
                       token.nationId +
@@ -516,6 +580,7 @@ class App extends Component {
                   />
                   <img
                     className="club"
+                    alt="Club Badge"
                     src={
                       "https://cdn.futbin.com/content/fifa23/img/clubs/" +
                       token.teamId +
