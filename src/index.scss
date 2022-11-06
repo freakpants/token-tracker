@@ -75,7 +75,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 2rem);
   position: absolute;
   @media screen and (max-width: 768px) {
     position: relative;
