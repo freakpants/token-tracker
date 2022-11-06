@@ -75,6 +75,12 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  position: absolute;
+  @media screen and (max-width: 768px) {
+    position: relative;
+    width: unset;
+  }
 
   &__twitter {
     margin-top: 1rem;
@@ -974,4 +980,41 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .MuiFormGroup-root .MuiButtonBase-root{
   margin: 5px auto;
+}
+
+.fullwidth{
+  justify-content: center;
+  margin: 1rem;
+  background: transparent;
+  border-bottom: 1px solid #505a64;
+  border-top: 1px solid #505a64;
+  border-left: unset;
+  border-right: unset;
+  border-radius: unset;
+
+  & .checkbox{
+    @media screen and (max-width: 768px) {
+      width: unset;
+    }
+  }
+
+
+  @media screen and (max-width: 768px) {
+    margin: 0;
+    margin-top: 1rem;
+    background: #2d2823;
+    border: 1px dashed #F8EEDE;
+    border-radius: 0.5rem;
+
+
+
+  }
+    
+
+  & .MuiPaper-root{
+    border: 1px dashed #F8EEDE;
+    @media screen and (max-width: 768px) {
+      border: unset;
+    }
+  }
 }

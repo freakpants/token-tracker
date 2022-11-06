@@ -126,7 +126,6 @@ class App extends Component {
         // get profiles from firebase
         onValue(ref(this.database, `tokens/worldcup/${uid}`), (snapshot) => {
           const data = snapshot.val();
-          let firstProfile = false;
           if (data) {
             profiles = Object.keys(data);
             if (
@@ -138,10 +137,7 @@ class App extends Component {
                 "setting profiles to cloud state and setting first cloud profile to active"
               );
               this.setState({ profiles: profiles, profile: profiles[0] });
-            } else {
-              // if we are overwriting the local profile state, we also need to set the tokens for the first of these profiles
-              firstProfile = true;
-            }
+            } 
             // get tokens from firebase
             let tokenStorage = {};
 
@@ -163,7 +159,6 @@ class App extends Component {
                       });
                       console.log("setting tokens from firebase");
                       this.setState({ tokens: tokens }, this.calculateTotal);
-                      firstProfile = false;
                     }
                     tokenStorage[profile] = data;
                   }
@@ -690,10 +685,11 @@ class App extends Component {
             </Paper>
           </div>
         </div>
-        <div className={"filter"}>
+        <div className={"filter fullwidth"}>
           <Accordion
             expanded={this.state.optionsExpanded}
             onChange={this.handleOptionExpansion}
+            elevation={0}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
