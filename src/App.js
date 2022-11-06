@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
   signInWithRedirect,
 } from "firebase/auth";
-import { getDatabase, set, ref, onValue } from "firebase/database";
+import { getDatabase, set, ref, onValue, remove } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { Button, Paper, FormGroup, IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -119,7 +119,7 @@ class App extends Component {
               return token;
             });
             console.log("setting tokens from firebase");
-            // this.setState({ tokens: tokens }, this.calculateTotal);
+            this.setState({ tokens: tokens }, this.calculateTotal);
           }
         });
         console.log("setting status to logged in");
@@ -146,7 +146,7 @@ class App extends Component {
     const { tokens, profile } = this.state;
 
     // only keep claimed status of tokens
-    const tokensToSave = [];
+    let tokensToSave = [];
 
     tokens.map((token) => {
       if (token.claimed) {
@@ -167,6 +167,9 @@ class App extends Component {
 
     // save to local storage
     let tokenStorage = JSON.parse(localStorage.getItem("tokens"));
+    if (!tokenStorage) {
+      tokenStorage = {};
+    }
     tokenStorage[profile] = tokensToSave;
     localStorage.setItem("tokens", JSON.stringify(tokenStorage));
     this.calculateTotal();
@@ -181,8 +184,6 @@ class App extends Component {
       mode: "edit",
       profileNameInput: this.state.profile,
     });
-    localStorage.setItem("profiles", JSON.stringify(this.state.profiles));
-    localStorage.setItem("profile", this.state.profileNameInput);
   }
 
   handleDeleteProfile() {
@@ -196,6 +197,11 @@ class App extends Component {
         this.setState({ profile: profiles[0], profiles: profiles }, () => {});
         localStorage.setItem("profiles", JSON.stringify(profiles));
         localStorage.setItem("profile", profiles[0]);
+        // remove from firebase
+        if (this.state.user) {
+          const { uid } = this.state.user;
+          remove(ref(this.database, `tokens/worldcup/${uid}/${profile}`));
+        }
       }
     } else {
       alert("You can't delete the only profile.");
@@ -213,6 +219,13 @@ class App extends Component {
         return token;
       });
 
+      // save to firebase
+      if (this.state.user) {
+        const { uid } = this.state.user;
+        const profile = this.state.profileNameInput;
+        set(ref(this.database, `tokens/worldcup/${uid}/${profile}`), {});
+      }
+
       this.setState({
         tokens: tokens,
         profiles: profiles,
@@ -222,6 +235,7 @@ class App extends Component {
     }
     const profiles = this.state.profiles;
     if (this.state.mode === "edit") {
+      const previousName = this.state.profile;
       const index = profiles.indexOf(this.state.profile);
       profiles[index] = this.state.profileNameInput;
       this.setState({
@@ -229,11 +243,31 @@ class App extends Component {
         editingProfile: false,
         profile: this.state.profileNameInput,
       });
+      if (this.state.user) {
+        const { uid } = this.state.user;
+        // delete previous profile from firebase
+        remove(ref(this.database, `tokens/worldcup/${uid}/${previousName}`));
+        // save new profile to firebase
+        const tokensToSave = [];
+        this.state.tokens.map((token) => {
+          if (token.claimed) {
+            tokensToSave.push(token.definitionId);
+          }
+          return token;
+        });
+        const profile = this.state.profileNameInput;
+        set(
+          ref(this.database, `tokens/worldcup/${uid}/${profile}`),
+          tokensToSave
+        );
+      }
+
     }
     this.setState({ editingProfile: false, mode: false });
     // save profiles to local storage
     localStorage.setItem("profiles", JSON.stringify(profiles));
     localStorage.setItem("profile", this.state.profileNameInput);
+
   }
 
   componentDidMount() {
