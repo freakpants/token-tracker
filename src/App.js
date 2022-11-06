@@ -261,13 +261,11 @@ class App extends Component {
           tokensToSave
         );
       }
-
     }
     this.setState({ editingProfile: false, mode: false });
     // save profiles to local storage
     localStorage.setItem("profiles", JSON.stringify(profiles));
     localStorage.setItem("profile", this.state.profileNameInput);
-
   }
 
   componentDidMount() {
@@ -292,9 +290,11 @@ class App extends Component {
 
     // check if we have a local token storage
     const tokenStorage = localStorage.getItem("tokens");
-    if (tokenStorage) {
-      // get the tokens from local storage
-      const tokensFromStorage = JSON.parse(tokenStorage);
+    // get the tokens from local storage
+    const tokensFromStorage = JSON.parse(tokenStorage);
+    
+    if (tokenStorage && tokensFromStorage[this.state.profile]) {
+      
       // get the tokens for the selected profile
       const tokensForProfile = tokensFromStorage[this.state.profile];
       // loop through the tokens and set the claimed status
@@ -364,23 +364,32 @@ class App extends Component {
 
   handleInputChange(event) {
     let { name, value } = event.target;
-
+    let tokens = this.state.tokens;
     if (name === "profile") {
       // get the tokens for the selected profile
-      const tokensForProfile = JSON.parse(localStorage.getItem("tokens"))[
-        value
-      ];
-      // loop through the tokens and set the claimed status
-      let tokens = this.state.tokens;
-      tokens.map((token) => {
-        if (tokensForProfile.includes(token.definitionId)) {
-          token.claimed = true;
-        } else {
+      const tokenStorage = JSON.parse(localStorage.getItem("tokens"));
+      if (tokenStorage && tokenStorage[value]) {
+        const tokensForProfile = tokenStorage[value];
+
+        // loop through the tokens and set the claimed status
+        
+        tokens.map((token) => {
+          if (tokensForProfile.includes(token.definitionId)) {
+            token.claimed = true;
+          } else {
+            token.claimed = false;
+          }
+          return token;
+        });
+        this.setState({ [name]: value, tokens: tokens }, this.calculateTotal);
+      } else {
+        // no tokens for this profile, set all to unclaimed
+        tokens.map((token) => {
           token.claimed = false;
-        }
-        return token;
-      });
-      this.setState({ [name]: value, tokens: tokens }, this.calculateTotal);
+          return token;
+        });
+        this.setState({ [name]: value, tokens: tokens }, this.calculateTotal);
+      }
     } else {
       this.setState({
         [name]: value,
