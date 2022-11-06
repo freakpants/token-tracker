@@ -101,27 +101,54 @@ class App extends Component {
 
         // get tokens from firebase
         const { uid } = user;
-        const profile = this.state.profile;
-        const tokensRef = ref(
-          this.database,
-          `tokens/worldcup/${uid}/${profile}`
-        );
-        onValue(tokensRef, (snapshot) => {
+
+        let profiles = {};
+        // get profiles from firebase
+        onValue(ref(this.database, `tokens/worldcup/${uid}`), (snapshot) => {
           const data = snapshot.val();
           if (data) {
-            // go through each token and set claimed status if it was in the data
-            const tokens = this.state.tokens;
-            tokens.map((token) => {
-              // check if this tokens definition id is in the data
-              if (data.includes(token.definitionId)) {
-                token.claimed = true;
-              }
-              return token;
+            profiles = Object.keys(data);
+            this.setState({ profiles: profiles, profile: profiles[0] });
+            // get tokens from firebase
+            let tokenStorage = {};
+            let firstProfile = true;
+            profiles.forEach((profile) => {
+              onValue(
+                ref(this.database, `tokens/worldcup/${uid}/${profile}`),
+                (snapshot) => {
+                  const data = snapshot.val();
+                  if (data) {
+                    if(firstProfile) {
+                      // go through each token and set claimed status if it was in the data
+                      const tokens = this.state.tokens;
+                      tokens.map((token) => {
+                        // check if this tokens definition id is in the data
+                        if (data.includes(token.definitionId)) {
+                          token.claimed = true;
+                        }
+                        return token;
+                      });
+                      console.log("setting tokens from firebase");
+                      this.setState({ tokens: tokens }, this.calculateTotal);
+                      firstProfile = false;
+                    } 
+                    tokenStorage[profile] = data;
+                  }
+                }
+              );
             });
-            console.log("setting tokens from firebase");
-            this.setState({ tokens: tokens }, this.calculateTotal);
+            console.log("setting token storage");
+            console.log(tokenStorage);
+            console.log(JSON.stringify(profiles));
+            // save tokens to local storage
+            localStorage.setItem("tokens", JSON.stringify(tokenStorage));
+            // save profiles to local storage
+            localStorage.setItem("profiles", JSON.stringify(profiles));
+            // save profile to local storage
+            localStorage.setItem("profile", profiles[0]);
           }
         });
+
         console.log("setting status to logged in");
         this.setState({ user: user, loggingIn: false });
       } else {
@@ -292,9 +319,8 @@ class App extends Component {
     const tokenStorage = localStorage.getItem("tokens");
     // get the tokens from local storage
     const tokensFromStorage = JSON.parse(tokenStorage);
-    
+
     if (tokenStorage && tokensFromStorage[this.state.profile]) {
-      
       // get the tokens for the selected profile
       const tokensForProfile = tokensFromStorage[this.state.profile];
       // loop through the tokens and set the claimed status
@@ -372,7 +398,7 @@ class App extends Component {
         const tokensForProfile = tokenStorage[value];
 
         // loop through the tokens and set the claimed status
-        
+
         tokens.map((token) => {
           if (tokensForProfile.includes(token.definitionId)) {
             token.claimed = true;
