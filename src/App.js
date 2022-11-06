@@ -9,10 +9,23 @@ import {
 } from "firebase/auth";
 import { getDatabase, set, ref, onValue, remove } from "firebase/database";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-import { Button, Paper, FormGroup, IconButton, Tooltip } from "@mui/material";
+import {
+  Button,
+  Paper,
+  FormGroup,
+  IconButton,
+  Tooltip,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -40,6 +53,11 @@ class App extends Component {
       editingProfile: false,
       mode: false,
       profileNameInput: "",
+      optionsExpanded: false,
+      orderBy: "number",
+      objectives: true,
+      sbcs: true,
+      packs: true,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -54,6 +72,8 @@ class App extends Component {
     this.handleEditProfile = this.handleEditProfile.bind(this);
     this.handleDeleteProfile = this.handleDeleteProfile.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleOptionExpansion = this.handleOptionExpansion.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -179,6 +199,29 @@ class App extends Component {
 
   triggerGoogleLogout() {
     this.auth.signOut();
+  }
+
+  handleOptionExpansion() {
+    this.setState((prevState) => {
+      let oldState = prevState["optionsExpanded"];
+      return {
+        optionsExpanded: !oldState,
+      };
+    });
+  }
+
+  handleCheckboxChange(event) {
+    const { name } = event.target;
+    this.setState(
+      (prevState) => {
+        let oldState = prevState[name];
+
+        return {
+          [name]: !oldState,
+        };
+      },
+      () => {}
+    );
   }
 
   saveTokens() {
@@ -464,6 +507,30 @@ class App extends Component {
 
     console.log("trying to render");
 
+    let sortedTokens;
+    if (this.state.orderBy === "expiry") {
+      sortedTokens = [...this.state.tokens].sort((a, b) => {
+        // convert expiry to date then compare
+        let aDate = new Date(a.swap_expiry);
+        let bDate = new Date(b.swap_expiry);
+        return aDate - bDate;
+      });
+    } else {
+      sortedTokens = this.state.tokens;
+    }
+
+    if(!this.state.sbcs){
+      // hide sbc tokens
+      sortedTokens = sortedTokens.filter((token) => token.swap_source_type !== 'sbc');
+    }
+    if(!this.state.objectives){
+      // hide objective tokens
+      sortedTokens = sortedTokens.filter((token) => token.swap_source_type !== 'objective');
+    }
+    if(!this.state.packs){
+      // hide pack tokens
+      sortedTokens = sortedTokens.filter((token) => token.swap_source_type !== 'pack');
+    }
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
@@ -623,10 +690,78 @@ class App extends Component {
             </Paper>
           </div>
         </div>
+        <div className={"filter"}>
+          <Accordion
+            expanded={this.state.optionsExpanded}
+            onChange={this.handleOptionExpansion}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Filters</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <FormGroup>
+                <div className={"filter__item"}>
+                  <select
+                    name="orderBy"
+                    onChange={this.handleInputChange}
+                    value={this.state.orderBy}
+                  >
+                    <option value="number">Number</option>
+                    <option value="expiry">Expiry</option>
+                  </select>
+                  <label htmlFor="orderBy">Order By</label>
+                </div>
+                <div className="filter__item checkbox">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.sbcs}
+                        name="sbcs"
+                        id="sbcs"
+                        onChange={this.handleCheckboxChange}
+                      />
+                    }
+                    label="SBCS"
+                  />
+                </div>
+                <div className="filter__item checkbox">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.objectives}
+                        name="objectives"
+                        id="objectives"
+                        onChange={this.handleCheckboxChange}
+                      />
+                    }
+                    label="Objectives"
+                  />
+                </div>
+                <div className="filter__item checkbox">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.packs}
+                        name="packs"
+                        id="packs"
+                        onChange={this.handleCheckboxChange}
+                      />
+                    }
+                    label="Packs"
+                  />
+                </div>
+              </FormGroup>
+            </AccordionDetails>
+          </Accordion>
+        </div>
 
         <div id="tokens">
           {this.state.tokens.length > 0 &&
-            this.state.tokens.map((token) => {
+            sortedTokens.map((token) => {
               let tokenClassName = "token";
               if (token.claimed) {
                 tokenClassName += " claimed";
