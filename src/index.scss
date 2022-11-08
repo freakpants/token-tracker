@@ -74,12 +74,14 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0 auto;
   align-items: center;
   width: calc(100% - 2rem);
   position: absolute;
+  
   @media screen and (max-width: 768px) {
     position: relative;
-    width: unset;
+    // width: unset;
   }
 
   &__twitter {
@@ -138,6 +140,7 @@ h1 {
   text-align: center;
   padding: 1rem;
   background-color: #2d2823;
+  color: $beige;
   z-index: 2;
 
   @media only screen and (max-width: 768px) {
@@ -248,6 +251,18 @@ h1 {
 
   & fieldset {
     border-color: $beige;
+  }
+
+  &.mainfilter {
+    margin: 25px 25px 0 25px;
+    & .filter__item{
+      margin: 0;
+    }
+
+    @media only screen and (max-width: 768px) {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 }
 
@@ -790,6 +805,7 @@ label:not(.MuiFormControlLabel-root)::before{
 
   &:hover {
     filter: saturate(1.5);
+    transition: filter .5s;
     cursor: pointer;
   }
 
@@ -815,6 +831,7 @@ label:not(.MuiFormControlLabel-root)::before{
 
     & img{
       filter: grayscale(75);
+      transition: filter .5s;      
     }
     
     & .expiry{
@@ -829,7 +846,7 @@ label:not(.MuiFormControlLabel-root)::before{
     flex-wrap: wrap;
     gap: 28px;
     justify-content: center;
-    margin-top: 25px;
+    margin: 25px;
     padding: 2rem 0;
 }
 
@@ -948,10 +965,24 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .headerArea{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  min-height: 200px;
   row-gap: 20px;
+
   @media only screen and (max-width: 768px) {
     flex-direction: column;
+  }
+
+  & .filter{
+    margin-left: auto;
+    margin-right: 25px;
+
+    @media only screen and (max-width: 768px) {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 }
 
@@ -961,15 +992,16 @@ label:not(.MuiFormControlLabel-root)::before{
 
 #counter__wrapper{
   display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: rgba(0,0,0,0.5);
-    padding: 1rem;
-    font-size: 1.3rem;
-    display: flex;
-    text-transform: uppercase;
-    border-radius: 50px;
-    height: 84px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.5);
+  padding: 1rem;
+  font-size: 1.3rem;
+  display: flex;
+  text-transform: uppercase;
+  border-radius: 50px;
+  height: 84px;
+  margin-left: 25px;
 }
 
 .MuiSvgIcon-root{
@@ -1006,9 +1038,6 @@ label:not(.MuiFormControlLabel-root)::before{
     background: #2d2823;
     border: 1px dashed #F8EEDE;
     border-radius: 0.5rem;
-
-
-
   }
     
 

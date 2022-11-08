@@ -566,16 +566,14 @@ class App extends Component {
                 target="_blank"
               >
                 <img alt="Twitter Logo" src={Twitter} /> FUT Coder
-              </a>{" "}
-              x{" "}
+              </a>
               <a
                 href="https://twitter.com/Kimpembro"
                 rel="noreferrer"
                 target="_blank"
               >
                 <img alt="Twitter Logo" src={Twitter} /> Kimpembro
-              </a>{" "}
-              x{" "}
+              </a>
               <a
                 href="https://twitter.com/Fleck_GFX"
                 rel="noreferrer"
@@ -685,74 +683,58 @@ class App extends Component {
             </Paper>
           </div>
         </div>
-        <div className={"filter fullwidth"}>
-          <Accordion
-            expanded={this.state.optionsExpanded}
-            onChange={this.handleOptionExpansion}
-            elevation={0}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+        <div className={"filter fullwidth mainfilter"}>
+          <div className={"filter__item"}>
+            <select
+              title="Order by"
+              name="orderBy"
+              onChange={this.handleInputChange}
+              value={this.state.orderBy}
             >
-              <Typography>Filters</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <FormGroup>
-                <div className={"filter__item"}>
-                  <select
-                    name="orderBy"
-                    onChange={this.handleInputChange}
-                    value={this.state.orderBy}
-                  >
-                    <option value="number">Number</option>
-                    <option value="expiry">Expiry</option>
-                  </select>
-                  <label htmlFor="orderBy">Order By</label>
-                </div>
-                <div className="filter__item checkbox">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.sbcs}
-                        name="sbcs"
-                        id="sbcs"
-                        onChange={this.handleCheckboxChange}
-                      />
-                    }
-                    label="SBCS"
-                  />
-                </div>
-                <div className="filter__item checkbox">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.objectives}
-                        name="objectives"
-                        id="objectives"
-                        onChange={this.handleCheckboxChange}
-                      />
-                    }
-                    label="Objectives"
-                  />
-                </div>
-                <div className="filter__item checkbox">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.packs}
-                        name="packs"
-                        id="packs"
-                        onChange={this.handleCheckboxChange}
-                      />
-                    }
-                    label="Packs"
-                  />
-                </div>
-              </FormGroup>
-            </AccordionDetails>
-          </Accordion>
+              <option value="number">Number</option>
+              <option value="expiry">Expiry</option>
+            </select>
+            <label htmlFor="orderBy">Order By</label>
+          </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.sbcs}
+                  name="sbcs"
+                  id="sbcs"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="SBCS"
+            />
+          </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.objectives}
+                  name="objectives"
+                  id="objectives"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="Objectives"
+            />
+          </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.packs}
+                  name="packs"
+                  id="packs"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="Packs"
+            />
+          </div>
         </div>
 
         <div id="tokens">
