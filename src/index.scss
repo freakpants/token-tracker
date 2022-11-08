@@ -138,6 +138,7 @@ h1 {
   text-align: center;
   padding: 1rem;
   background-color: #2d2823;
+  z-index: 2;
 
   @media only screen and (max-width: 768px) {
       justify-content: center;
