@@ -56,6 +56,7 @@ class App extends Component {
       packs: true,
       unclaimedFilter: true,
       claimedFilter: true,
+      expiredFilter: true,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -533,6 +534,10 @@ class App extends Component {
       sortedTokens = sortedTokens.filter((token) => !token.claimed);
     }
 
+    if(!this.state.expiredFilter){
+      sortedTokens = sortedTokens.filter((token) => !token.expired);
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
@@ -767,6 +772,19 @@ class App extends Component {
                 />
               }
               label="Claimed"
+            />
+          </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.expiredFilter}
+                  name="expiredFilter"
+                  id="expiredFilter"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="Expired"
             />
           </div>
         </div>
