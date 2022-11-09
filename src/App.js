@@ -15,17 +15,12 @@ import {
   FormGroup,
   IconButton,
   Tooltip,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
@@ -58,6 +53,8 @@ class App extends Component {
       objectives: true,
       sbcs: true,
       packs: true,
+      unclaimedFilter: true,
+      claimedFilter: true,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -526,6 +523,15 @@ class App extends Component {
       // hide pack tokens
       sortedTokens = sortedTokens.filter((token) => token.swap_source_type !== 'pack');
     }
+
+    if(!this.state.unclaimedFilter){
+      sortedTokens = sortedTokens.filter((token) => token.claimed);
+    }
+
+    if(!this.state.claimedFilter){
+      sortedTokens = sortedTokens.filter((token) => !token.claimed);
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
@@ -735,6 +741,32 @@ class App extends Component {
               label="Packs"
             />
           </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.unclaimedFilter}
+                  name="unclaimedFilter"
+                  id="unclaimedFilter"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="Unclaimed"
+            />
+          </div>
+          <div className="filter__item checkbox">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.claimedFilter}
+                  name="claimedFilter"
+                  id="claimedFilter"
+                  onChange={this.handleCheckboxChange}
+                />
+              }
+              label="Claimed"
+            />
+          </div>
         </div>
 
         <div id="tokens">
@@ -759,7 +791,7 @@ class App extends Component {
                       className="avatar"
                       alt="Player Avatar"
                       src={
-                        "https://cdn.futbin.com/content/fifa23/img/players/" +
+                        "https://static.wefut.com/assets/images/fut23/playeravatars/" +
                         token.playerId +
                         ".png"
                       }
@@ -771,16 +803,16 @@ class App extends Component {
                     className="nation"
                     alt="Nation Flag"
                     src={
-                      "https://cdn.futbin.com/content/fifa23/img/nation/" +
+                      "https://static.wefut.com/assets/images/nation_flag/" +
                       token.nationId +
-                      ".png"
+                      ".jpg"
                     }
                   />
                   <img
                     className="club"
                     alt="Club Badge"
                     src={
-                      "https://cdn.futbin.com/content/fifa23/img/clubs/" +
+                      "https://static.wefut.com/assets/images/fut23/clubbadges/" +
                       token.teamId +
                       ".png"
                     }
