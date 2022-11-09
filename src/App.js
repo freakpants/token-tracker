@@ -29,6 +29,7 @@ import WcTokenNew from "./assets/wctokennew.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
+import GoogleLoginButton from "./assets/googleloginbutton.png";
 import Loader from "react-loaders";
 
 class App extends Component {
@@ -593,10 +594,11 @@ class App extends Component {
             <Paper elevation={0}>
               {!this.state.user && !this.state.loggingIn && (
                 <img
+                  class="LoginButton"
                   alt="Google Login"
                   onClick={this.triggerGoogleLogin}
                   src={
-                    "https://developers.google.com/static/identity/images/btn_google_signin_dark_normal_web.png"
+                    GoogleLoginButton
                   }
                 />
               )}
