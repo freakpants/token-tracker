@@ -1,3 +1,8 @@
+/*
+3 tokens = 1040 x 585
+50 tokens screenshot = 2400*1350
+*/
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -31,6 +36,7 @@ import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
 import GoogleLoginButton from "./assets/googleloginbutton.png";
 import Loader from "react-loaders";
+import Spartanfut from "./assets/spartanfut.png";
 
 class App extends Component {
   constructor(props) {
@@ -57,6 +63,7 @@ class App extends Component {
       unclaimedFilter: true,
       claimedFilter: true,
       expiredFilter: true,
+      screenshotMode: false,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -541,6 +548,12 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div className={"headerArea"}>
+          {this.state.screenshotMode && (
+            <div className={"creator"}>
+              <img src={Spartanfut} alt="creator" />
+            </div>
+          )}
+
           <div id="counter__wrapper">
             <div className={"logo__title"}>World Cup 2022</div>
             <div id="counters">
@@ -548,20 +561,24 @@ class App extends Component {
                 <div className={"counter__title"}>Total</div>
                 <div className={"counter__value"}>{this.state.total}</div>
               </div>
+              { !this.state.screenshotMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Claimed</div>
                 <div className={"counter__value"}>{this.state.claimed}</div>
               </div>
+              )}
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Expired</div>
                 <div className={"counter__value"}>
                   {this.state.expiredCount}
                 </div>
               </div>
+              {!this.state.screenshotMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Missed</div>
                 <div className={"counter__value"}>{this.state.missed}</div>
               </div>
+              )}
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Max</div>
                 <div className={"counter__value"}>{this.state.max}</div>
@@ -595,6 +612,7 @@ class App extends Component {
               </a>
             </div>
           </div>
+          { ! this.state.screenshotMode && (
           <div className={"filter"}>
             <Paper elevation={0}>
               {!this.state.user && !this.state.loggingIn && (
@@ -695,7 +713,9 @@ class App extends Component {
               </FormGroup>
             </Paper>
           </div>
+          )}
         </div>
+        { ! this.state.screenshotMode && (
         <div className={"filter fullwidth mainfilter"}>
           <div className={"filter__item"}>
             <select
@@ -788,6 +808,7 @@ class App extends Component {
             />
           </div>
         </div>
+        )}
 
         <div id="tokens">
           {this.state.tokens.length > 0 &&

@@ -1052,3 +1052,13 @@ label:not(.MuiFormControlLabel-root)::before{
 .LoginButton{
   cursor: pointer;
 }
+
+.creator img{
+  width: 112px;
+}
+
+.creator{
+  position: absolute;
+  right: 250px;
+  top: 153px;
+}
