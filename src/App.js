@@ -21,7 +21,7 @@ import {
   IconButton,
   Tooltip,
   FormControlLabel,
-  Checkbox,
+  Checkbox
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -821,6 +821,7 @@ class App extends Component {
                 tokenClassName += " expired";
               }
               return (
+                <tooltip title={token.swap_hover}>
                 <div
                   onClick={() => this.handleTokenClick(token.definitionId)}
                   key={token.definitionId}
@@ -879,6 +880,7 @@ class App extends Component {
                   </div>
                   <div className="counter">{token.swap_id}</div>
                 </div>
+                </tooltip>
               );
             })}
         </div>
