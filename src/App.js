@@ -30,7 +30,7 @@ import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
-import WcTokenNew from "./assets/wctokennew.png";
+import FutureToken from "./assets/futuretoken.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
@@ -555,7 +555,7 @@ class App extends Component {
           )}
 
           <div id="counter__wrapper">
-            <div className={"logo__title"}>World Cup 2022</div>
+            <div className={"logo__title"}>Future Stars</div>
             <div id="counters">
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
@@ -602,13 +602,6 @@ class App extends Component {
                 target="_blank"
               >
                 <img alt="Twitter Logo" src={Twitter} /> Kimpembro
-              </a>
-              <a
-                href="https://twitter.com/Fleck_GFX"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <img alt="Twitter Logo" src={Twitter} /> Fleck
               </a>
             </div>
           </div>
@@ -827,7 +820,7 @@ class App extends Component {
                   key={token.definitionId}
                   className={tokenClassName}
                 >
-                  <img className="background" src={WcTokenNew} alt="WC Token" />
+                  <img className="background" src={FutureToken} alt="Future Stars Token" />
                   {token.bestQualityImage === "futbin" && (
                     <img
                       className="avatar"

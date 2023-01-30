@@ -54,7 +54,7 @@ input:disabled{
 
 body {
   background-color: $dark-black;
-  background-image: url('assets/worldcup_dark.png');
+  background-image: url('assets/futurestars.png');
   background-size: cover;
   background-attachment: fixed;
   margin: 0;
@@ -107,13 +107,13 @@ h1 {
   }
 
   &__title {
-    color: $white;
-    font-family: 'Qatar2022 Arabic';
-    font-size: 1.5rem;
+    color: black;
+    font-family: 'MATROSKA';
+    font-size: 2.1rem;
     text-align: center;
-    background: linear-gradient(180deg, rgba(185,0,64,1) 0%, rgba(199,0,54,1) 99%);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: white 0.14rem;
+    text-stroke: white 0.14rem;
+    text-shadow: 0.28rem 0.3rem white;
   }
 
   &__subtitle {
