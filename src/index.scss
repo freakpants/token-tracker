@@ -912,7 +912,7 @@ label:not(.MuiFormControlLabel-root)::before{
 .avatar{
   position: absolute;
   right: 4%;
-  top: 12.5%;
+  top: 13.5%;
   width: 90px;
 }
 
@@ -1000,7 +1000,7 @@ label:not(.MuiFormControlLabel-root)::before{
   display: flex;
   text-transform: uppercase;
   border-radius: 50px;
-  height: 84px;
+  height: 10rem;
   margin-left: 25px;
 }
 
@@ -1061,4 +1061,8 @@ label:not(.MuiFormControlLabel-root)::before{
   position: absolute;
   right: 250px;
   top: 153px;
+}
+
+.futurelogo{
+  width: 10rem;
 }

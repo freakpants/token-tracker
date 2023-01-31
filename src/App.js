@@ -31,6 +31,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
 import FutureToken from "./assets/futuretoken.png";
+import FutureLogo from "./assets/futurelogo.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
@@ -555,7 +556,7 @@ class App extends Component {
           )}
 
           <div id="counter__wrapper">
-            <div className={"logo__title"}>Future Stars</div>
+            <div className={"logo__title"}><img className={"futurelogo"} src={FutureLogo} /></div>
             <div id="counters">
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
