@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/token-tracker/static/css/main.30719762.css",
-    "main.js": "/token-tracker/static/js/main.43f6eaa3.js",
+    "main.js": "/token-tracker/static/js/main.6932dd8b.js",
     "static/media/futurestars.png": "/token-tracker/static/media/futurestars.e550849e506d0d67fde7.png",
     "static/media/MATROSKA.ttf.svg": "/token-tracker/static/media/MATROSKA.ttf.36d972b523b1d230880a.svg",
     "static/media/MATROSKA.ttf.eot": "/token-tracker/static/media/MATROSKA.ttf.1facc6e0a79a0ea22059.eot",
@@ -18,10 +18,10 @@
     "index.html": "/token-tracker/index.html",
     "static/media/twitter.svg": "/token-tracker/static/media/twitter.3509701c40bcecebe8b255e66a0fea2c.svg",
     "main.30719762.css.map": "/token-tracker/static/css/main.30719762.css.map",
-    "main.43f6eaa3.js.map": "/token-tracker/static/js/main.43f6eaa3.js.map"
+    "main.6932dd8b.js.map": "/token-tracker/static/js/main.6932dd8b.js.map"
   },
   "entrypoints": [
     "static/css/main.30719762.css",
-    "static/js/main.43f6eaa3.js"
+    "static/js/main.6932dd8b.js"
   ]
 }
