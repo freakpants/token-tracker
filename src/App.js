@@ -1,5 +1,9 @@
 /*
 3 tokens = 1040 x 585
+8 tokens = 1142 x 724
+15 tokens = 1402 x 787
+21 tokens = 1600 x 969
+32 = 1920 x 1080
 50 tokens screenshot = 2400*1350
 */
 
