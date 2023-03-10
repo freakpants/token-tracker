@@ -510,8 +510,6 @@ class App extends Component {
       },
     });
 
-    console.log("trying to render");
-
     let sortedTokens;
     if (this.state.orderBy === "expiry") {
       sortedTokens = [...this.state.tokens].sort((a, b) => {
