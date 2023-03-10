@@ -559,7 +559,7 @@ class App extends Component {
           )}
 
           <div id="counter__wrapper">
-            <div className={"logo__title"}><img className={"futurelogo"} src={FutureLogo} /></div>
+            <div className={"logo__title"}><img alt="futurestarslogo" className={"futurelogo"} src={FutureLogo} /></div>
             <div id="counters">
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
