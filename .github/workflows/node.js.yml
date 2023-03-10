@@ -1,0 +1,33 @@
+on: push
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js 16
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+      
+    - name: 🔨 Build Project
+      run: |
+        npm ci
+        npm run build
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: freakpants.ch
+        username: ${{ secrets.ftpuser }}
+        password: ${{ secrets.ftppass }}
+        local-dir: ./build/
+        server-dir: /www/futcoder.ch/token-tracker/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          index.html
