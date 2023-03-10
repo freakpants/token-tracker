@@ -91,13 +91,12 @@ class App extends Component {
     const firebaseConfig = {
       apiKey: "AIzaSyBZjAp5aWnUV9y_AbI0UeN8fMSco9L7U3U",
       authDomain: "pack-collector.firebaseapp.com",
+      databaseURL: "https://pack-collector-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "pack-collector",
       storageBucket: "pack-collector.appspot.com",
       messagingSenderId: "935679710199",
-      appId: "1:935679710199:web:906c3ac232f7d9fecf54f2",
-      measurementId: "G-60T2BG3K5X",
-      databaseURL:
-        "https://pack-collector-default-rtdb.europe-west1.firebasedatabase.app/",
+      appId: "1:935679710199:web:ffd442a33fb885e1cf54f2",
+      measurementId: "G-8ZML73NVJ4"
     };
 
     const fireApp = initializeApp(firebaseConfig);
