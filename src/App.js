@@ -585,7 +585,8 @@ class App extends Component {
       sortedTokens = sortedTokens.filter((token) => !token.expired);
     }
 
-    const containerClass = this.state.rewardsMode ? "rewardContainer" : "tokens";
+    const containerClass = this.state.rewardsMode ? "rewardContainer" : "";
+    const containerId = this.state.rewardsMode ? "" : "tokens";
 
     return (
       <ThemeProvider theme={theme}>
@@ -865,7 +866,7 @@ class App extends Component {
         </div>
         )}
 
-        <div className={containerClass}>
+        <div className={containerClass} id={containerId}>
           {this.state.rewardsMode && 
             this.state.rewards.map((reward) => {
               let rewardImage = '';
