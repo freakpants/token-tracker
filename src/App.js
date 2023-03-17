@@ -35,13 +35,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "./assets/logopc.png";
 import Twitter from "./assets/twitter.svg";
 import FutureToken from "./assets/futuretoken.png";
+import Pick from "./assets/playerPicksIcon.png";
 import FutureLogo from "./assets/futurelogo.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
+import GoldPack from "./assets/goldpack.png";
 import GoogleLoginButton from "./assets/googleloginbutton.png";
 import Loader from "react-loaders";
 import Spartanfut from "./assets/spartanfut.png";
+import axios from "axios";
 
 class App extends Component {
   constructor(props) {
@@ -69,6 +72,7 @@ class App extends Component {
       claimedFilter: true,
       expiredFilter: true,
       screenshotMode: false,
+      rewardsMode: false,
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -85,6 +89,7 @@ class App extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleOptionExpansion = this.handleOptionExpansion.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.toggleRewardsMode = this.toggleRewardsMode.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -195,6 +200,15 @@ class App extends Component {
 
         this.setState({ user: false, loggingIn: false });
       }
+    });
+  }
+
+  toggleRewardsMode() {
+    this.setState((prevState) => {
+      let oldState = prevState["rewardsMode"];
+      return {
+        rewardsMode: !oldState,
+      };
     });
   }
 
@@ -361,7 +375,31 @@ class App extends Component {
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
+    let rewards = require("./Rewards.json");
     let expiredCount = 0;
+
+    // loop through the rewards, and get the player data for player rewards
+    rewards.map((reward) => {
+      if (reward.type === "player") {
+        // get player data from api
+        axios
+        .get(
+          process.env.REACT_APP_AJAXSERVER +
+            "player.php?definitionId=" +
+            reward.definitionId
+        )
+        .then((response) => {
+          // if the response has a definitionId, we have a player
+          reward.playerData = response.data;
+          return reward;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+      return reward;
+    });
+
 
     // check if we have a local profile
     let profile = localStorage.getItem("profile");
@@ -419,7 +457,7 @@ class App extends Component {
     });
     console.log("setting initial token state");
     this.setState(
-      { tokens: tokens, expiredCount: expiredCount },
+      { tokens: tokens, expiredCount: expiredCount, rewards: rewards},
       this.calculateTotal
     );
   }
@@ -710,8 +748,28 @@ class App extends Component {
           </div>
           )}
         </div>
-        { ! this.state.screenshotMode && (
+        { this.state.rewardsMode && (
+          <div className={"filter fullwidth mainfilter"}>
+            <div className={"filter__item rewards"}>
+                <Button
+                      onClick={this.toggleRewardsMode}
+                      variant="contained"
+                    >
+                      Tokens
+                    </Button>
+            </div>
+          </div>
+        )}      
+        { ! this.state.screenshotMode && ! this.state.rewardsMode && (
         <div className={"filter fullwidth mainfilter"}>
+          <div className={"filter__item rewards"}>
+              <Button
+                    onClick={this.toggleRewardsMode}
+                    variant="contained"
+                  >
+                    Rewards
+                  </Button>
+          </div>
           <div className={"filter__item"}>
             <select
               title="Order by"
@@ -805,8 +863,219 @@ class App extends Component {
         </div>
         )}
 
-        <div id="tokens">
-          {this.state.tokens.length > 0 &&
+        <div class="rewardContainer">
+          {this.state.rewardsMode && 
+            this.state.rewards.map((reward) => {
+              let rewardImage = '';
+              switch(reward.type) {
+                case "pick":
+                  rewardImage = <div style={{position: "relative" }} class="card__wrapper"><img alt="rewardimage" className={"rewardImage"} src={Pick} /></div>;
+                  break;
+                case "pack":
+                  rewardImage = <div style={{position: "relative" }} class="card__wrapper"><img  alt="rewardimage" className={"rewardImage"} src={GoldPack} /></div>;
+                  break;
+                case "player":
+                  const player = reward.playerData;
+                  let alternatePositions = [];
+                  if (player.alt_positions) {
+                    // remove spaces at end
+                    player.alt_positions = player.alt_positions.trim();
+                    alternatePositions = player.alt_positions.split(" ");
+                  }
+                  // get the player info from the api
+                  rewardImage = (<a href={"/database/player/" + player.definitionId} >
+                    <div style={{transform: "scale(0.7)"}} className="card__wrapper" data-rareflag={player.rareflag}>
+                  <div className={"card__wrapper__item " + player.rareClass}>
+                    <img
+                      alt="cardbg"
+                      className="card__wrapper__item__bg"
+                      src={
+                        "https://freakpants.ch/fut/php/cards/cards_bg_e_1_" +
+                        player.rareflag +
+                        "_" +
+                        player.rarity +
+                        ".png"
+                      }
+                    />
+                    <img
+                      alt="playeravatar"
+                      className={
+                        "card__wrapper__item__dynamic " + player.imageClass
+                      }
+                      src={player.src}
+                    />
+                    <div className="card__wrapper__item__ratings">
+                      <span className="card__wrapper__item__ratings__rating">
+                        {player.rating}
+                      </span>
+                      <span className="card__wrapper__item__ratings__position">
+                        {player.preferredPosition}
+                      </span>
+
+                      <div className="card__wrapper__item__ratings__extra">
+                        <div className="card__wrapper__item__ratings__divider"></div>
+                        <img
+                          alt="Countryflag"
+                          src={
+                            "https://www.futwiz.com/assets/img/fifa22/flags/" +
+                            player.nationId +
+                            ".png"
+                          }
+                          className="card__wrapper__item__ratings__nation"
+                        />
+                        <div className="card__wrapper__item__ratings__divider"></div>
+                        <img
+                          alt="teamlogo"
+                          src={
+                            "https://cdn.futbin.com/content/fifa23/img/clubs/" +
+                            player.teamId +
+                            ".png"
+                          }
+                          className="card__wrapper__item__ratings__club"
+                        />
+                      </div>
+                    </div>
+                    <div className="card__wrapper__item__name">{player.name}</div>
+
+                    <div className="card__wrapper__item__stats">
+                      <div className="card__wrapper__item__stats__dividers">
+                        <div className="card__wrapper__item__stats__dividers__hor"></div>
+                        <div className="card__wrapper__item__stats__dividers__ver"></div>
+                        <div className="card__wrapper__item__stats__dividers__horxs"></div>
+                      </div>
+                      <div className="card__wrapper__item__stats__row">
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.pac}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            PAC
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.dri}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            DRI
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                      </div>
+                      <div className="card__wrapper__item__stats__row">
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.sho}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            SHO
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.def}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            DEF
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                      </div>
+                      <div className="card__wrapper__item__stats__row">
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.pas}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            PAS
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                        <div className="card__wrapper__item__stats__row__cell">
+                          <span className="card__wrapper__item__stats__row__cell__value">
+                            {player.phy}
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__label">
+                            PHY
+                          </span>
+                          <span className="card__wrapper__item__stats__row__cell__diff pos"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card__wrapper__item__alts">
+                      {alternatePositions.length > 0 &&
+                        alternatePositions.map((position) => {
+                          return (
+                            <div className="card__wrapper__item__alts__item">
+                              {position}
+                            </div>
+                          );
+                        })}
+                    </div>
+
+                    <div className="card__wrapper__item__pricing">
+                      <div>
+                        <img
+                          alt="playstation"
+                          src="https://cdn.futbin.com/design/img/logos/small/ps_blue.png"
+                          title="Console market"
+                        />
+                        <img
+                          alt="xbox"
+                          src="https://cdn.futbin.com/design/img/logos/small/xbox_green.png"
+                          title="Console market"
+                        />
+                        <span className="card__wrapper__item__pricing__price">
+                          {player.formatted_price}
+                        </span>
+                      </div>
+                      <div className="card__wrapper__item__pricing__pricerange">
+                        Price Range: {player.min_price}-{player.max_price}
+                      </div>
+                    </div>
+
+                    <div className="card__wrapper__item__extra no-promo prices">
+                      <span>left</span>
+                      <span>
+                        {player.offensiveWorkRate}/{player.defensiveWorkRate} WR
+                      </span>
+                      <span>
+                        {player.skillMoves}
+                        <img
+                          alt="star"
+                          src="https://freakpants.ch/fut/php/star.png"
+                          title="Star"
+                        />{" "}
+                        SM
+                      </span>
+                      <span>
+                        {player.weakFoot}
+                        <img
+                          alt="star"
+                          src="https://freakpants.ch/fut/php/star.png"
+                          title="Star"
+                        />{" "}
+                        WF
+                      </span>
+                    </div>
+                  </div>
+                </div></a>)
+                break;
+                  
+                default:
+                  break;
+              }
+              return ( 
+              <div className={"reward"}>
+                {rewardImage}
+                <div className={"rewardCost"}>{reward.cost} TOKENS</div>
+                <div className={"rewardName"}>{reward.name}</div>
+              </div>)
+            })
+          }
+          {this.state.tokens.length > 0 && ! this.state.rewardsMode && 
             sortedTokens.map((token) => {
               let tokenClassName = "token";
               if (token.claimed) {
