@@ -255,7 +255,9 @@ h1 {
   &.mainfilter {
     margin: 25px 25px 0 25px;
     & .filter__item{
-      margin: 0;
+      @media only screen and (min-width: 769px) {
+        margin: 0;
+      }
     }
 
     @media only screen and (max-width: 768px) {
@@ -955,8 +957,10 @@ label:not(.MuiFormControlLabel-root)::before{
   max-height: 3rem;
   gap: 20px;
   @media only screen and (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 2rem;
     gap: unset;
+    max-height:unset;
+    margin: 1rem;
   }
 }
 
@@ -974,6 +978,9 @@ label:not(.MuiFormControlLabel-root)::before{
   justify-content: center;
   flex-direction: column;
   margin-right: 1rem;
+  @media screen and (max-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .rewards button{
@@ -1020,6 +1027,9 @@ label:not(.MuiFormControlLabel-root)::before{
   border-radius: 50px;
   height: 10rem;
   margin-left: 25px;
+  @media only screen and (max-width: 768px) {
+    height: unset;
+  }
 }
 
 .MuiSvgIcon-root{
@@ -1069,6 +1079,9 @@ label:not(.MuiFormControlLabel-root)::before{
 
 .LoginButton{
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    width: 230px;
+  }
 }
 
 .creator img{
