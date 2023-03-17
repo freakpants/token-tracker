@@ -961,6 +961,7 @@ label:not(.MuiFormControlLabel-root)::before{
     gap: unset;
     max-height:unset;
     margin: 1rem;
+    flex-wrap: wrap;
   }
 }
 
@@ -1029,6 +1030,7 @@ label:not(.MuiFormControlLabel-root)::before{
   margin-left: 25px;
   @media only screen and (max-width: 768px) {
     height: unset;
+    margin: 0;
   }
 }
 
