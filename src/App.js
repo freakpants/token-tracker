@@ -32,11 +32,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { Component } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Logo from "./assets/logopc.png";
+import Logo from "./assets/tokenlogo.png";
 import Twitter from "./assets/twitter.svg";
-import FutureToken from "./assets/futuretoken.png";
+import FutBirthday from "./assets/futbirthday.png";
 import Pick from "./assets/playerPicksIcon.png";
-import FutureLogo from "./assets/futurelogo.png";
+import BirthdayLogo from "./assets/birthdaylogo.png";
 import SBC from "./assets/sbc.png";
 import XP from "./assets/xp.png";
 import PACK from "./assets/pack.png";
@@ -598,7 +598,7 @@ class App extends Component {
           )}
 
           <div id="counter__wrapper">
-            <div className={"logo__title"}><img alt="futurestarslogo" className={"futurelogo"} src={FutureLogo} /></div>
+            <div className={"logo__title"}><img alt="birthdaylogo" className={"birthdaylogo"} src={BirthdayLogo} /></div>
             <div id="counters">
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
@@ -1094,7 +1094,7 @@ class App extends Component {
                   key={token.definitionId}
                   className={tokenClassName}
                 >
-                  <img className="background" src={FutureToken} alt="Future Stars Token" />
+                  <img className="background" src={FutBirthday} alt="Fut Birthday Token" />
                   {token.bestQualityImage === "futbin" && (
                     <img
                       className="avatar"

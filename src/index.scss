@@ -54,7 +54,7 @@ input:disabled{
 
 body {
   background-color: $dark-black;
-  background-image: url('assets/futurestars.png');
+  background-image: url('assets/birthdaybg.png');
   background-size: cover;
   background-attachment: fixed;
   font-family: $base-font-family;
@@ -85,10 +85,13 @@ h1 {
   &__twitter {
     margin-top: 1rem;
     font-size: 1rem;
-    color:$beige;
+
+    & img{
+      filter: invert(1);
+    }
 
     & a {
-      color: $beige;
+      color: black;
       text-decoration: none;
       text-transform: uppercase;
       margin-right: 1rem;
@@ -123,7 +126,7 @@ h1 {
   }
 
   &__img {
-    max-width: 20rem;
+    max-width: 21rem;
     height: auto;
     margin: auto 0;
   }
@@ -1047,7 +1050,7 @@ label:not(.MuiFormControlLabel-root)::before{
 .fullwidth{
   justify-content: center;
   margin: 1rem;
-  background: transparent;
+  background: black;
   border-bottom: 1px solid #505a64;
   border-top: 1px solid #505a64;
   border-left: unset;
@@ -1095,12 +1098,12 @@ label:not(.MuiFormControlLabel-root)::before{
   top: 153px;
 }
 
-.futurelogo{
-  width: 10rem;
+.birthdaylogo{
+  width: 18rem;
 }
 
 .rewardCost{
-  color: #ffff9a;
+  color: black;
   font-size: 1.25rem;
   text-align: center;
   position: absolute;
@@ -1109,7 +1112,7 @@ label:not(.MuiFormControlLabel-root)::before{
 }
 
 .rewardName{
-  color: white;
+  color: black;
   font-size: 1.5rem;
   text-align: center;
   position: absolute;
