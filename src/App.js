@@ -72,7 +72,7 @@ class App extends Component {
       claimedFilter: true,
       expiredFilter: true,
       screenshotMode: false,
-      rewardsMode: false,
+      rewardsMode: false
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
