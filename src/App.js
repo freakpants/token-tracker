@@ -1,5 +1,6 @@
 /*
 3 tokens = 1040 x 585
+6 tokens = 1142 x 635
 8 tokens = 1142 x 724
 15 tokens = 1402 x 787
 21 tokens = 1600 x 969
