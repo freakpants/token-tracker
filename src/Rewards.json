@@ -1,12 +1,55 @@
- [
+[
     { "id": 0,
-    "cost": 3,
-    "name": "Fut Birthday Team 1 Pack",
+    "cost": 1,
+    "name": "81+ x 11 Rare Players Pack",
     "type": "pack"
-    },
+    }, 
     { "id": 1,
-    "cost": 10,
-    "name": "85+ OVR x10",
+    "cost": 3,
+    "name": "WC Hernan Crespo",
+    "type": "player",
+    "definitionId" : 270438 
+    }, 
+    { "id": 2,
+    "cost": 3,
+    "name": "FUT Birthday Team 1 Player Pack",
     "type": "pack"
+    }, 
+    { "id": 3,
+    "cost": 5,
+    "name": "82+ x 20 Rare Players Pack",
+    "type": "pack"
+    }, 
+    { "id": 4,
+    "cost": 10,
+    "name": "85+ x 10 Rare Players Pack",
+    "type": "pack"
+    }, 
+    { "id": 5,
+    "cost": 15,
+    "name": "87+ RTFF, FF Hero, FF, FUT Birthday Team 1 PP (1 of 5)",
+    "type": "pick"
+    }, 
+    { "id": 6,
+    "cost": 17,
+    "name": "Prime Rio Ferdinand",
+    "type": "player",
+    "definitionId" : 7289
+    }, 
+    { "id": 7,
+    "cost": 20,
+    "name": "2x 84+ x 20 Pack",
+    "type": "pack"
+    }, 
+    { "id": 8,
+    "cost": 20,
+    "name": "Birthday Alan Shearer",
+    "type": "player",
+    "definitionId" : 50331699
+    },
+    { "id": 9,
+    "cost": 27,
+    "name": "90+ Prime Icon PP (1 of 4)",
+    "type": "pick"
     }
 ]

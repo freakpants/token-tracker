@@ -73,7 +73,8 @@ class App extends Component {
       claimedFilter: true,
       expiredFilter: true,
       screenshotMode: false,
-      rewardsMode: false
+      rewardsMode: false,
+      tokensNeeded: 0
     };
 
     this.handleTokenClick = this.handleTokenClick.bind(this);
@@ -91,6 +92,7 @@ class App extends Component {
     this.handleOptionExpansion = this.handleOptionExpansion.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
     this.toggleRewardsMode = this.toggleRewardsMode.bind(this);
+    this.toggleReward = this.toggleReward.bind(this);
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -211,6 +213,23 @@ class App extends Component {
         rewardsMode: !oldState,
       };
     });
+  }
+
+  toggleReward(rewardId){
+    let rewards = this.state.rewards;
+    let reward = rewards.find((reward) => reward.id === rewardId);
+    reward.claimed = !reward.claimed;
+    this.setState({rewards: rewards}, this.countNeededTokens);
+  }
+
+  countNeededTokens(){
+    let neededTokens = 0;
+    this.state.rewards.forEach((reward) => {
+      if(reward.claimed){
+        neededTokens += reward.cost;
+      }
+    });
+    this.setState({tokensNeeded: neededTokens});
   }
 
   triggerGoogleLogin() {
@@ -376,8 +395,10 @@ class App extends Component {
   componentDidMount() {
     // get the players from the json file
     let tokens = require("./Tokens.json");
-    let rewards = require("./Rewards.json");
+    
     let expiredCount = 0;
+
+    let rewards = require("./Rewards.json");
 
     // loop through the rewards, and get the player data for player rewards
     rewards.map((reward) => {
@@ -398,6 +419,8 @@ class App extends Component {
           console.log(error);
         });
       }
+      // also add unclaimed status
+      reward.claimed = false;
       return reward;
     });
 
@@ -527,6 +550,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.rewards);
     const theme = createTheme({
       typography: {
         fontFamily: "Matroska",
@@ -601,28 +625,40 @@ class App extends Component {
           <div id="counter__wrapper">
             <div className={"logo__title"}><img alt="birthdaylogo" className={"birthdaylogo"} src={BirthdayLogo} /></div>
             <div id="counters">
+              { !this.state.rewardsMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Total</div>
                 <div className={"counter__value"}>{this.state.total}</div>
               </div>
+              )}
               { !this.state.screenshotMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Claimed</div>
                 <div className={"counter__value"}>{this.state.claimed}</div>
               </div>
               )}
+              { !this.state.rewardsMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Expired</div>
                 <div className={"counter__value"}>
                   {this.state.expiredCount}
                 </div>
               </div>
-              {!this.state.screenshotMode && (
+              )}
+              {!this.state.screenshotMode && !this.state.rewardsMode && (
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Missed</div>
                 <div className={"counter__value"}>{this.state.missed}</div>
               </div>
               )}
+              { this.state.rewardsMode && (
+              <div className="counter__item">
+                <div className="counter__title">Needed</div>
+                <div className={this.state.tokensNeeded > this.state.max ? "counter__value impossible" : this.state.tokensNeeded > this.state.claimed ? 
+                 "counter__value claimmore" : "counter__value" }>{this.state.tokensNeeded}</div>
+              </div>
+              )}
+              
               <div className={"counter__item"}>
                 <div className={"counter__title"}>Max</div>
                 <div className={"counter__value"}>{this.state.max}</div>
@@ -1072,10 +1108,12 @@ class App extends Component {
                   break;
               }
               return ( 
-              <div className={"reward"}>
+              <div className={reward.claimed ? "reward claimed" : "reward"}>
                 {rewardImage}
+                <div className={"rewardToggle"} onClick={(e) => this.toggleReward(reward.id)}>
                 <div className={"rewardCost"}>{reward.cost} TOKENS</div>
                 <div className={"rewardName"}>{reward.name}</div>
+                </div>
               </div>)
             })
           }

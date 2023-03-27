@@ -976,6 +976,15 @@ label:not(.MuiFormControlLabel-root)::before{
   text-align: center;
 }
 
+.counter__value.impossible{
+  color: red;
+  background: rgba(0,0,0,0.5);
+}
+
+.counter__value.claimmore{
+  color: orange;
+}
+
 .rewards.rewards.rewards{
   display: flex;
   justify-content: center;
@@ -1134,6 +1143,14 @@ label:not(.MuiFormControlLabel-root)::before{
   align-content: center;
   height: 450px;
   position: relative;
+  filter: grayscale(100%);  
+  opacity: 0.8;
+}
+
+
+.reward.claimed{
+  filter: unset;
+  opacity: 1;
 }
 
 .rewardImage{
@@ -1147,5 +1164,12 @@ label:not(.MuiFormControlLabel-root)::before{
 }
 
 .reward a{
+  width: 100%;
+}
+
+.rewardToggle{
+  position: absolute;
+  cursor: pointer;
+  bottom: 0;
   width: 100%;
 }
